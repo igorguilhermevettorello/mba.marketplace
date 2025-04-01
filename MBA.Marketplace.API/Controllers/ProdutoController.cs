@@ -43,7 +43,7 @@ namespace MBA.Marketplace.API.Controllers
                 .FirstOrDefaultAsync(c => c.Id == dto.CategoriaId);
 
             if (categoria == null)
-                return Unauthorized("Categoria não é válido.");
+                return BadRequest("Categoria não é válido.");
 
             //// Salvar imagem
             //string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);

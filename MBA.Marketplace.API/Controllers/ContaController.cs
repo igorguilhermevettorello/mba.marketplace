@@ -5,6 +5,7 @@ using MBA.Marketplace.Core.Models;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Eventing.Reader;
 
 namespace MBA.Marketplace.API.Controllers
 {
@@ -16,6 +17,8 @@ namespace MBA.Marketplace.API.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IAccountService _accountService;
 
+        private string[] ErrorPassowrd = { "PasswordTooShort", "PasswordRequiresNonAlphanumeric", "PasswordRequiresLower", "PasswordRequiresUpper", "PasswordRequiresDigit" };
+        private string[] ErrorEmail = { "DuplicateUserName" };
         public ContaController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IAccountService accountService)
         {
             _userManager = userManager;
@@ -40,8 +43,16 @@ namespace MBA.Marketplace.API.Controllers
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
-                    ModelState.AddModelError("Identity", error.Description);
+                {
+                    var field = "Identity";
+                    if (ErrorEmail.Contains(error.Code))
+                        field = "Email";
+                    else if (ErrorPassowrd.Contains(error.Code))
+                        field = "Senha";
 
+                    ModelState.AddModelError(field, error.Description);
+                }
+                
                 return BadRequest(ModelState);
             }
 

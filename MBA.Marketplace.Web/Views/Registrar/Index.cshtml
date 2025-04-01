@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
 }
 
-
-
 <div class="container mt-5" style="max-width: 400px;">
     <div class="card shadow">
         <div class="card-header bg-dark text-white py-2">
@@ -13,7 +11,7 @@
         </div>
         <div class="card-body">
 
-            <form asp-action="Login" method="post" novalidate>
+            <form asp-action="Index" method="post" novalidate>
                 <div class="mb-3">
                     <label asp-for="Nome" class="form-label fw-semibold small"></label>
                     <input asp-for="Nome" class="form-control form-control-sm" />
@@ -52,4 +50,60 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+
+<!-- Modal de sucesso -->
+@if (ViewBag.RegistroSucesso == true)
+{
+    <div class="modal fade show" id="modalSucesso" style="display: block;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Cadastro realizado</h5>
+                </div>
+                <div class="modal-body">
+                    Sua conta foi criada com sucesso.
+                </div>
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index", "Login")" class="btn btn-success">Ir para login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop fade show"></div>
+
+    <script>
+        // Impede que o modal feche com tecla ESC ou clique fora
+        document.body.classList.add('modal-open');
+        document.body.style.paddingRight = '0px';
+    </script>
+}
+
+@if (ViewBag.RegistroErro == true)
+{
+    <div class="modal fade show" id="modalSucesso" style="display: block;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Falha ao realizar o cadastro</h5>
+                </div>
+                <div class="modal-body">
+                    Ocorreu um erro ao realizar seu cadastro. Tente novamente mais tarde!
+                </div>
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-danger">Ir para tela inicial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop manual -->
+    <div class="modal-backdrop fade show"></div>
+
+    <script>
+        // Impede que o modal feche com tecla ESC ou clique fora
+        document.body.classList.add('modal-open');
+        document.body.style.paddingRight = '0px';
+    </script>
 }

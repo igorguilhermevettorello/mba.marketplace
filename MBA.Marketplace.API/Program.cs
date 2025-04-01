@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MBA.Marketplace.API.Utils.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlite(connectionString);
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        // Aqui você também pode configurar as regras de senha
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddErrorDescriber<IdentityErrorDescriberPtBr>() // 👈 isso aqui é o que importa!
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
@@ -57,6 +68,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
 });
+
+
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();

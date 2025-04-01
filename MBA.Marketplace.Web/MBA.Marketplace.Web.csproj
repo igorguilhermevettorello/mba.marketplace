@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MBA.Marketplace.Core\MBA.Marketplace.Core.csproj" />
+  </ItemGroup>
+
 </Project>

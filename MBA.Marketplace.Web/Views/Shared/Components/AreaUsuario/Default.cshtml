@@ -1,0 +1,22 @@
+﻿@model MBA.Marketplace.Web.Models.AreaUsuarioModel
+
+@if (Model.Logado)
+{
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-4 me-1"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+        </ul>
+    </div>
+}
+else
+{
+    <div>
+        <a asp-action="Index" asp-controller="Login"  class="d-flex align-items-center text-white text-decoration-none">
+            <i class="bi bi-person-circle fs-4 me-1"></i>
+        </a>        
+    </div>
+}
