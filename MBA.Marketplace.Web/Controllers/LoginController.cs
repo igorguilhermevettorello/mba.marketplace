@@ -69,7 +69,12 @@ namespace MBA.Marketplace.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult EsqueciSenha() => View(); // ainda será criada
-        public IActionResult Registrar() => RedirectToAction("Registrar", "Conta");
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("AccessToken");
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
