@@ -26,4 +26,8 @@
     <ProjectReference Include="..\MBA.Marketplace.Data\MBA.Marketplace.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\produtos\" />
+  </ItemGroup>
+
 </Project>

@@ -25,7 +25,8 @@ namespace MBA.Marketplace.API.Services
             var categoria = new Categoria
             {
                 Nome = dto.Nome,
-                Descricao = dto.Descricao
+                Descricao = dto.Descricao,
+                CreatedAt = DateTime.Now
             };
 
             _context.Categorias.Add(categoria);
@@ -46,6 +47,7 @@ namespace MBA.Marketplace.API.Services
 
             categoria.Nome = dto.Nome;
             categoria.Descricao = dto.Descricao;
+            categoria.UpdatedAt = DateTime.Now;
 
             _context.Categorias.Update(categoria);
             await _context.SaveChangesAsync();

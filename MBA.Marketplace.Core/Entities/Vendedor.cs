@@ -10,6 +10,7 @@ namespace MBA.Marketplace.Core.Entities
         [Key]
         public Guid Id { get; set; }
         [Required]
+        [MaxLength(255)]
         public string Nome { get; set; }
         public string Email { get; set; }
         public string UsuarioId { get; set; } 
