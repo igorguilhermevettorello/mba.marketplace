@@ -1,7 +1,6 @@
 ﻿using MBA.Marketplace.API.Services.Interfaces;
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Models;
-using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
