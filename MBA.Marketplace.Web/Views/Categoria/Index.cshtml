@@ -1,0 +1,40 @@
+﻿@using MBA.Marketplace.Web.ViewModels;
+@model List<CategoriaViewModel>
+@{
+    ViewData["Title"] = "Listar Categorias";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Erro))
+{
+    <div class="alert alert-danger">@ViewBag.Erro</div>
+}
+else
+{
+    <table class="table table-sm table-hover align-middle">
+        <thead class="table-light border-bottom">
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th style="width: 120px;" class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoria in Model)
+            {
+                <tr class="border-bottom border-secondary-subtle">
+                    <td class="fw-semibold">@categoria.Nome</td>
+                    <td class="text-muted">@categoria.Descricao</td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-outline-success btn-sm me-1" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger btn-sm" title="Remover">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
