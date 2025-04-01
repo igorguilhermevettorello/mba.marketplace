@@ -1,0 +1,55 @@
+﻿@model MBA.Marketplace.Web.ViewModels.RegistroViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutLoginRegistro.cshtml";
+}
+
+
+
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white py-2">
+            <h5 class="mb-0 small">Criar conta</h5>
+        </div>
+        <div class="card-body">
+
+            <form asp-action="Login" method="post" novalidate>
+                <div class="mb-3">
+                    <label asp-for="Nome" class="form-label fw-semibold small"></label>
+                    <input asp-for="Nome" class="form-control form-control-sm" />
+                    <span asp-validation-for="Nome" class="text-danger small"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold small"></label>
+                    <input asp-for="Email" class="form-control form-control-sm" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Senha" class="form-label fw-semibold small"></label>
+                    <input asp-for="Senha" class="form-control form-control-sm" />
+                    <span asp-validation-for="Senha" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ConfirmacaoSenha" class="form-label fw-semibold small"></label>
+                    <input asp-for="ConfirmacaoSenha" class="form-control form-control-sm" />
+                    <span asp-validation-for="ConfirmacaoSenha" class="text-danger small"></span>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <button type="submit" class="btn btn-success btn-sm">Login</button>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" asp-controller="Login" class="text-success small">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

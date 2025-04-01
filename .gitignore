@@ -1,0 +1,65 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+.vs/
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+appsettings.Production.json # (opcional, se tiver segredo)
+
+# Rider
+.idea/
+
+# dotnet secrets
+secrets.json
+
+# Logs
+*.log
+logs/
+
+# Test results
+TestResults/
+*.trx
+
+# Database
+*.db
+*.sqlite
+*.mdf
+*.ldf
+
+# Npm / frontend
+node_modules/
+npm-debug.log
+dist/
+build/
+
+# EF Core
+Migrations/
+
+# JetBrains Rider
+.idea/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Others
+.env
+*.bak
+*.zip
+*.7z

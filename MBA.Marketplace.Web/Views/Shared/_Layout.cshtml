@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MBA.Marketplace.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MBA.Marketplace.Web.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MBA.Marketplace.Web</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav> *@
+        @* <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 py-2">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-bag-check-fill me-2 fs-4"></i>
+                <strong>MBA.MarketPlace</strong>
+            </a>
+
+            <form class="ms-4 flex-grow-1" style="max-width: 600px;">
+                <div class="input-group dark-mode">
+                    <select class="form-select" style="max-width: 150px;">
+                        <option selected>All Category</option>
+                        <option>Eletrônicos</option>
+                        <option>Roupas</option>
+                    </select>
+                    <input type="search" class="form-control" placeholder="Search product here..." aria-label="Search">
+                    <button class="btn btn-success" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="d-flex align-items-center ms-auto">
+                <a href="#" class="text-white me-3 position-relative">
+                    <i class="bi bi-bag fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span>
+                </a>
+                <a href="#" class="text-white me-3">
+                    <i class="bi bi-bell fs-5"></i>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-4 me-1"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav> *@
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 py-2 d-flex justify-content-between align-items-center">
+            <a asp-action="Index" asp-controller="Home" class="navbar-brand d-flex align-items-center me-auto" href="#">
+                <i class="bi bi-bag-check-fill me-2 fs-4"></i>
+                <strong>MBA.MarketPlace</strong>
+            </a>
+            <form class="mx-auto w-50" style="min-width: 400px;">
+                <div class="input-group dark-mode">
+                    <select class="form-select" style="max-width: 150px;">
+                        <option selected>All Category</option>
+                        <option>Eletrônicos</option>
+                        <option>Roupas</option>
+                    </select>
+                    <input type="search" class="form-control" placeholder="Search product here..." aria-label="Search">
+                    <button class="btn btn-success" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="d-flex align-items-center ms-auto">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-4 me-1"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - MBA.Marketplace.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
