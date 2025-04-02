@@ -18,6 +18,7 @@ namespace MBA.Marketplace.API.Services
 
         public async Task<Produto> CriarAsync(ProdutoDto dto, Vendedor vendedor)
         {
+            
             // Salvar imagem
             string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);
             string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");

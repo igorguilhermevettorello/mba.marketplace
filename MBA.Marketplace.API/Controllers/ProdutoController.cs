@@ -45,36 +45,7 @@ namespace MBA.Marketplace.API.Controllers
             if (categoria == null)
                 return BadRequest("Categoria não é válido.");
 
-            //// Salvar imagem
-            //string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);
-            //string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
-
-            //if (!Directory.Exists(caminhoPasta))
-            //    Directory.CreateDirectory(caminhoPasta);
-
-            //string caminhoArquivo = Path.Combine(caminhoPasta, nomeArquivo);
-
-            //using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
-            //{
-            //    await dto.Imagem.CopyToAsync(stream);
-            //}
-
-            //// Criar produto
-            //var produto = new Produto
-            //{
-            //    Nome = dto.Nome,
-            //    Descricao = dto.Descricao,
-            //    Preco = dto.Preco,
-            //    Estoque = dto.Estoque,
-            //    CategoriaId = dto.CategoriaId,
-            //    VendedorId = vendedor.Id,
-            //    Imagem = nomeArquivo
-            //};
-
-            //_context.Produtos.Add(produto);
-            //await _context.SaveChangesAsync();
-
-            var produto = _produtoService.CriarAsync(dto, vendedor);
+            var produto = await _produtoService.CriarAsync(dto, vendedor);
 
             return CreatedAtAction(null, new { id = produto.Id }, produto);
         }

@@ -12,17 +12,17 @@ namespace MBA.Marketplace.Web.Controllers
     public class CategoriaController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-
-        public CategoriaController(IHttpClientFactory httpClientFactory)
+        private readonly ILogger<ProdutoController> _logger;
+        public CategoriaController(IHttpClientFactory httpClientFactory, ILogger<ProdutoController> logger) 
         {
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var client = _httpClientFactory.CreateClient();
-            client.AdicionarToken(HttpContext);
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.GetAsync("https://localhost:7053/api/categorias");
 
             if (!response.IsSuccessStatusCode)
@@ -47,10 +47,8 @@ namespace MBA.Marketplace.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var client = _httpClientFactory.CreateClient();
-            client.AdicionarToken(HttpContext);
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.PostAsJsonAsync("https://localhost:7053/api/categorias", model);
-
             if (response.IsSuccessStatusCode)
             {
                 ViewBag.RegistroSucesso = true;
@@ -95,15 +93,7 @@ namespace MBA.Marketplace.Web.Controllers
         [HttpGet("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id)
         {
-            var token = HttpContext.Request.Cookies["AccessToken"];
-            var client = _httpClientFactory.CreateClient();
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.GetAsync($"https://localhost:7053/api/categorias/{id}");
 
             if (!response.IsSuccessStatusCode)
@@ -122,15 +112,7 @@ namespace MBA.Marketplace.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var token = HttpContext.Request.Cookies["AccessToken"];
-            var client = _httpClientFactory.CreateClient();
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.PutAsJsonAsync($"https://localhost:7053/api/categorias/{model.Id}", model);
 
             if (response.IsSuccessStatusCode)
@@ -177,15 +159,7 @@ namespace MBA.Marketplace.Web.Controllers
         [HttpDelete("deletar/{id:Guid}")]
         public async Task<IActionResult> Deletar(Guid id)
         {
-            var token = HttpContext.Request.Cookies["AccessToken"];
-            var client = _httpClientFactory.CreateClient();
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.DeleteAsync($"https://localhost:7053/api/categorias/{id}");
 
             if (response.IsSuccessStatusCode)
@@ -193,6 +167,5 @@ namespace MBA.Marketplace.Web.Controllers
 
             return BadRequest("Erro ao excluir categoria.");
         }
-
     }
 }
