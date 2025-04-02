@@ -1,11 +1,11 @@
 ﻿@using MBA.Marketplace.Web.ViewModels;
 @model CategoriaFormViewModel
 @{
-    ViewData["Title"] = "Cadastrar Categoria";
+    ViewData["Title"] = "Editar Categoria";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form asp-action="criar" method="post" class="needs-validation" novalidate>
+<form asp-action="editar" method="post" class="needs-validation" novalidate>
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <div class="mb-3">
@@ -25,7 +25,7 @@
             <button type="submit" class="btn btn-success btn-sm">
                 <i class="bi bi-save me-1"></i> Salvar
             </button>
-            <a href="@Url.Action("Index", "Categoria")" class="btn btn-outline-secondary btn-sm">
+            <a href="@Url.Action("index", "categoria")" class="btn btn-outline-secondary btn-sm">
                 Cancelar
             </a>
         </div>
@@ -43,11 +43,11 @@
             <div class="modal-content shadow-sm border-0 rounded-3">
                 <div class="modal-header bg-light border-0 rounded-top-3">
                     <h5 class="modal-title text-success fw-semibold">
-                        <i class="bi bi-check-circle me-2"></i> Cadastro realizado
+                        <i class="bi bi-check-circle me-2"></i> Edição realizada
                     </h5>
                 </div>
                 <div class="modal-body text-secondary small">
-                    Sua categoria foi criada com sucesso.
+                    Sua categoria foi editada com sucesso.
                 </div>
                 <div class="modal-footer bg-light border-0 rounded-bottom-3">
                     <a href="@Url.Action("index", "categoria")" class="btn btn-success btn-sm px-4">
@@ -75,14 +75,46 @@
             <div class="modal-content shadow-sm border-0 rounded-3">
                 <div class="modal-header bg-light border-0 rounded-top-3">
                     <h5 class="modal-title text-danger fw-semibold">
-                        <i class="bi bi-check-circle me-2"></i> Falha ao realizar o cadastro
+                        <i class="bi bi-check-circle me-2"></i> Falha ao realizar o edição
                     </h5>
                 </div>
                 <div class="modal-body text-secondary small">
-                    Ocorreu um erro ao realizar o cadastro de categoria. Tente novamente mais tarde!
+                    Ocorreu um erro ao realizar a edição da categoria. Tente novamente mais tarde!
                 </div>
                 <div class="modal-footer bg-light border-0 rounded-bottom-3">
-                    <a href="@Url.Action("Index", "Categoria")" class="btn btn-danger btn-sm px-4">
+                    <a href="@Url.Action("index", "categoria")" class="btn btn-danger btn-sm px-4">
+                        Ok
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop manual -->
+    <div class="modal-backdrop fade show"></div>
+
+    <script>
+        // Impede que o modal feche com tecla ESC ou clique fora
+        document.body.classList.add('modal-open');
+        document.body.style.paddingRight = '0px';
+    </script>
+}
+
+@if (ViewBag.RegistroNaoEncontrado == true)
+{
+    <div class="modal fade show" id="modalSucesso" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-sm border-0 rounded-3">
+                <div class="modal-header bg-light border-0 rounded-top-3">
+                    <h5 class="modal-title text-danger fw-semibold">
+                        <i class="bi bi-x-circle me-2"></i> Falha ao localizar categoria
+                    </h5>
+                </div>
+                <div class="modal-body text-secondary small">
+                    Categoria não encontrada.
+                </div>
+                <div class="modal-footer bg-light border-0 rounded-bottom-3">
+                    <a href="@Url.Action("index", "categoria")" class="btn btn-danger btn-sm px-4">
                         Ok
                     </a>
                 </div>

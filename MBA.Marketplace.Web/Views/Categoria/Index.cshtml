@@ -26,10 +26,10 @@ else
                     <td class="fw-semibold">@categoria.Nome</td>
                     <td class="text-muted">@categoria.Descricao</td>
                     <td class="text-end">
-                        <a href="#" class="btn btn-outline-success btn-sm me-1" title="Editar">
+                        <a class="btn btn-outline-success btn-sm me-1" title="Editar" href="@Url.Action("editar", "categoria", new { id = categoria.Id })" data-id="@categoria.Id">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-danger btn-sm" title="Remover">
+                        <a onclick="deletarCategoria(this, event)" class="btn btn-outline-danger btn-sm btn-remover" title="Remover" data-id="@categoria.Id">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
@@ -37,4 +37,87 @@ else
             }
         </tbody>
     </table>
+}
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="modalConfirmar" tabindex="-1" aria-labelledby="confirmarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-sm">
+            <div class="modal-header bg-warning-subtle border-0">
+                <h5 class="modal-title" id="confirmarLabel">Confirmar remoção</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja remover esta categoria?
+                <div id="spinner" class="text-center mt-3 d-none">
+                    <div class="spinner-border text-warning" role="status"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="btnConfirmarRemocao" onclick="confirmacaoDeletarCategoria(this, event)"  class="btn btn-danger btn-sm">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de feedback -->
+<div class="modal fade" id="modalResultado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-sm">
+            <div class="modal-header bg-light border-0">
+                <h5 class="modal-title" id="resultadoTitulo">Resultado</h5>
+            </div>
+            <div class="modal-body" id="resultadoMensagem"></div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let categoriaId = null;
+        let url = "@Url.Action("deletar", "categoria")";
+
+        function deletarCategoria(element, event) {
+            event.preventDefault();
+            categoriaId = $(element).data('id');
+            const modal = new bootstrap.Modal(document.getElementById('modalConfirmar'));
+            modal.show();
+        }
+
+        function confirmacaoDeletarCategoria(element, event) {
+            event.preventDefault();
+
+            if (!categoriaId) return;
+
+            $('#spinner').removeClass('d-none');
+            $('#btnConfirmarRemocao').prop('disabled', true);
+
+            $.ajax({
+                url: `${url}/${categoriaId}`,
+                type: 'DELETE',
+                success: function () {
+                    $('#modalConfirmar').modal('hide');
+                    showResultado("Categoria removida com sucesso!", true);
+                },
+                error: function () {
+                    $('#modalConfirmar').modal('hide');
+                    showResultado("Erro ao remover categoria. Tente novamente.", false);
+                },
+                complete: function () {
+                    $('#spinner').addClass('d-none');
+                    $('#btnConfirmarRemocao').prop('disabled', false);
+                }
+            });
+        };
+
+        function showResultado(mensagem, sucesso) {
+            $('#resultadoTitulo').text(sucesso ? 'Sucesso' : 'Erro');
+            $('#resultadoMensagem').text(mensagem);
+            const modalResultado = new bootstrap.Modal(document.getElementById('modalResultado'));
+            modalResultado.show();
+        }
+    </script>
 }
