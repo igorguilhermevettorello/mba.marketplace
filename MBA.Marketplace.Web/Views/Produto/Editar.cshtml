@@ -1,5 +1,159 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using MBA.Marketplace.Web.ViewModels;
+@model ProdutoFormViewModel
 @{
+    ViewData["Title"] = "Editar Produto";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form asp-action="editar" method="post" enctype="multipart/form-data">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label asp-for="Nome" class="form-label">Nome</label>
+                <input asp-for="Nome" class="form-control form-control-sm" placeholder="Nome do produto" />
+                <span asp-validation-for="Nome" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Descricao" class="form-label">Descrição</label>
+                <textarea asp-for="Descricao" class="form-control form-control-sm" rows="3" placeholder="Descrição detalhada"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger small"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Preco" class="form-label">Preço</label>
+                    <input name="Preco"
+                           id="Preco"
+                           type="text"
+                           class="form-control preco-mask"
+                           data-val="false"
+                           autocomplete="off" />
+                    <input type="hidden" name="Preco" id="PrecoReal" />
+                    <span asp-validation-for="Preco" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Estoque" class="form-label">Estoque</label>
+                    <input asp-for="Estoque" class="form-control form-control-sm" type="number" />
+                    <span asp-validation-for="Estoque" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CategoriaId" class="form-label">Categoria</label>
+                    <select asp-for="CategoriaId" class="form-select form-select-sm" asp-items="ViewBag.Categorias">
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                    <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6 mb-3 mb-3">
+                    <label asp-for="Imagem" class="form-label">Imagem do Produto</label>
+                    <input asp-for="Imagem" class="form-control form-control-sm" type="file" accept="image/*" />
+                    <span asp-validation-for="Imagem" class="text-danger small"></span>
+                    <div>
+                        <img src="@Model.Src"
+                             alt="@Model.Nome"
+                             class="img-thumbnail"
+                             onerror="this.src='/images/sem-imagem.png'"
+                             style="max-width: 150px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light text-end">
+            <button type="submit" class="btn btn-success btn-sm">
+                <i class="bi bi-save me-1"></i> Salvar
+            </button>
+            <a href="@Url.Action("index", "produto")" class="btn btn-outline-secondary btn-sm">Cancelar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('.preco-mask').maskMoney({
+                prefix: '',
+                allowNegative: false,
+                thousands: '.',
+                decimal: ',',
+                affixesStay: false
+            });
+
+            $('form').on('submit', function () {
+                const raw = $('.preco-mask').val().replace("R$", "").split(".").join("").split(",").join(".").trim()
+                $('#PrecoReal').val(raw);
+            });
+        });
+    </script>
+}
+
+@if (ViewBag.RegistroSucesso == true)
+{
+    <div class="modal fade show" id="modalSucesso" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-sm border-0 rounded-3">
+                <div class="modal-header bg-light border-0 rounded-top-3">
+                    <h5 class="modal-title text-success fw-semibold">
+                        <i class="bi bi-check-circle me-2"></i> Cadastro realizado
+                    </h5>
+                </div>
+                <div class="modal-body text-secondary small">
+                    Seu produto foi criado com sucesso.
+                </div>
+                <div class="modal-footer bg-light border-0 rounded-bottom-3">
+                    <a href="@Url.Action("index", "produto")" class="btn btn-success btn-sm px-4">
+                        Ok
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop manual -->
+    <div class="modal-backdrop fade show"></div>
+
+    <script>
+        // Impede que o modal feche com tecla ESC ou clique fora
+        document.body.classList.add('modal-open');
+        document.body.style.paddingRight = '0px';
+    </script>
+}
+
+@if (ViewBag.RegistroErro == true)
+{
+    <div class="modal fade show" id="modalSucesso" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-sm border-0 rounded-3">
+                <div class="modal-header bg-light border-0 rounded-top-3">
+                    <h5 class="modal-title text-danger fw-semibold">
+                        <i class="bi bi-x-circle me-2"></i> Falha ao realizar o cadastro
+                    </h5>
+                </div>
+                <div class="modal-body text-secondary small">
+                    Ocorreu um erro ao realizar o cadastro de produto. Tente novamente mais tarde!
+                </div>
+                <div class="modal-footer bg-light border-0 rounded-bottom-3">
+                    <a href="@Url.Action("index", "produto")" class="btn btn-danger btn-sm px-4">
+                        Ok
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop manual -->
+    <div class="modal-backdrop fade show"></div>
+
+    <script>
+        // Impede que o modal feche com tecla ESC ou clique fora
+        document.body.classList.add('modal-open');
+        document.body.style.paddingRight = '0px';
+    </script>
 }

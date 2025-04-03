@@ -8,19 +8,16 @@ namespace MBA.Marketplace.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-
         public RegistrarController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory; 
         }
-
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Index(RegistroViewModel model)
         {

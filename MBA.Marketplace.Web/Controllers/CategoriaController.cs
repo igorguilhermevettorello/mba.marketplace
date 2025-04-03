@@ -2,7 +2,6 @@
 using MBA.Marketplace.Web.Helpers;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace MBA.Marketplace.Web.Controllers
@@ -18,7 +17,6 @@ namespace MBA.Marketplace.Web.Controllers
             _httpClientFactory = httpClientFactory;
             _logger = logger;
         }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -34,13 +32,11 @@ namespace MBA.Marketplace.Web.Controllers
             var categorias = await response.Content.ReadFromJsonAsync<List<CategoriaViewModel>>();
             return View(categorias);
         }
-
         [HttpGet("criar")]
         public IActionResult Criar()
         {
             return View();
         }
-
         [HttpPost("criar")]
         public async Task<IActionResult> Criar(CategoriaFormViewModel model)
         {
@@ -89,7 +85,6 @@ namespace MBA.Marketplace.Web.Controllers
                 return View(model);
             }
         }
-
         [HttpGet("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id)
         {
@@ -105,7 +100,6 @@ namespace MBA.Marketplace.Web.Controllers
             var categoria = await response.Content.ReadFromJsonAsync<CategoriaFormViewModel>();
             return View(categoria);
         }
-
         [HttpPost("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id, CategoriaFormViewModel model)
         {
@@ -155,17 +149,34 @@ namespace MBA.Marketplace.Web.Controllers
                 return View(model);
             }
         }
-
         [HttpDelete("deletar/{id:Guid}")]
         public async Task<IActionResult> Deletar(Guid id)
         {
             var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.DeleteAsync($"https://localhost:7053/api/categorias/{id}");
 
-            if (response.IsSuccessStatusCode)
-                return Ok();
+            if (!response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var content = await response.Content.ReadAsStringAsync();
 
-            return BadRequest("Erro ao excluir categoria.");
+                    var resultado = JsonSerializer.Deserialize<MensagemErroViewModel>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    var mensagem = resultado?.Mensagem ?? "Erro ao excluir categoria.";
+
+                    return BadRequest(mensagem);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Erro ao excluir categoria.");
+                }
+            }
+
+            return Ok();
         }
     }
 }

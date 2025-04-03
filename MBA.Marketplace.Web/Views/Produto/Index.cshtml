@@ -1,4 +1,5 @@
 ﻿@using MBA.Marketplace.Web.ViewModels;
+@using MBA.Marketplace.Web.Extensions;
 @model List<ProdutoViewModel>
 @{
     ViewData["Title"] = "Listar Produtos";
@@ -29,7 +30,7 @@ else
                 <tr class="border-bottom border-secondary-subtle">
                     <td class="fw-semibold">@produto.Nome</td>
                     <td class="text-muted">@produto.Descricao</td>
-                    <td class="text-muted">@produto.Preco</td>
+                    <td class="text-muted">@produto.Preco.ToPtBrCurrency()</td>
                     <td class="text-muted">@produto.Estoque</td>
                     <td class="text-muted">@produto.Categoria.Nome</td>
                     <td class="text-muted">@produto.Imagem</td>

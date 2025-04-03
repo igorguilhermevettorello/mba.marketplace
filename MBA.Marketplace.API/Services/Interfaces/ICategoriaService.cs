@@ -1,5 +1,6 @@
 ﻿using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
+using MBA.Marketplace.Core.Enums;
 
 namespace MBA.Marketplace.API.Services.Interfaces
 {
@@ -9,6 +10,6 @@ namespace MBA.Marketplace.API.Services.Interfaces
         Task<Categoria> CriarAsync(CategoriaDto dto);
         Task<Categoria> ObterPorIdAsync(Guid id);
         Task<bool> AtualizarAsync(Guid id, CategoriaDto dto);
-        Task<bool> RemoverAsync(Guid id);
+        Task<StatusRemocaoEnum> RemoverAsync(Guid id);
     }
 }

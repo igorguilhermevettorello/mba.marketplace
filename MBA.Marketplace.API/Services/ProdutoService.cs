@@ -1,8 +1,10 @@
-﻿using MBA.Marketplace.API.Services.Interfaces;
+﻿using MBA.Marketplace.API.Configurations;
+using MBA.Marketplace.API.Services.Interfaces;
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Data.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MBA.Marketplace.API.Services
@@ -11,11 +13,12 @@ namespace MBA.Marketplace.API.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _env;
-
-        public ProdutoService(ApplicationDbContext context, IWebHostEnvironment env)
+        private readonly AppSettings _settings;
+        public ProdutoService(ApplicationDbContext context, IWebHostEnvironment env, IOptions<AppSettings> options)
         {
             _context = context;
             _env = env;
+            _settings = options.Value;
         }
         public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
         {
@@ -61,7 +64,11 @@ namespace MBA.Marketplace.API.Services
         }
         public async Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor)
         {
-            return await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            if (produto != null) 
+                produto.Src = $"{_settings.Url}/api/produtos/imagem/{produto.Imagem}";
+            
+            return produto;
         }
         public async Task<bool> AtualizarAsync(Guid id, ProdutoDto dto, Vendedor vendedor)
         {

@@ -12,5 +12,6 @@
         public string Imagem { get; set; }
         public Guid VendedorId { get; set; }
         public VendedorViewModel Vendedor { get; set; }
+        public string Src { get; set; }
     }
 }

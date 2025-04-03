@@ -1,4 +1,5 @@
-﻿using MBA.Marketplace.Web.Filters;
+﻿using AutoMapper;
+using MBA.Marketplace.Web.Filters;
 using MBA.Marketplace.Web.Helpers;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,26 @@ namespace MBA.Marketplace.Web.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ProdutoController> _logger;
-        public ProdutoController(IHttpClientFactory httpClientFactory, ILogger<ProdutoController> logger)
+        private readonly IMapper _mapper;
+        public ProdutoController(IHttpClientFactory httpClientFactory, ILogger<ProdutoController> logger, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _mapper = mapper;
         }
+        private async Task<SelectList>  BuscarCategorias()
+        {
+            var categorias = new SelectList(Enumerable.Empty<SelectListItem>());
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
+            var response = await client.GetAsync("https://localhost:7053/api/categorias");
+            if (response.IsSuccessStatusCode)
+            {
+                var itens = await response.Content.ReadFromJsonAsync<List<CategoriaViewModel>>();
+                categorias = new SelectList(itens, "Id", "Nome");
+            }
+            return categorias;
+        }
+        
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -37,19 +53,7 @@ namespace MBA.Marketplace.Web.Controllers
         [HttpGet("criar")]
         public async Task<IActionResult> Criar()
         {
-            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.GetAsync("https://localhost:7053/api/categorias");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var categorias = await response.Content.ReadFromJsonAsync<List<CategoriaViewModel>>();
-                ViewBag.Categorias = new SelectList(categorias, "Id", "Nome");
-            }
-            else
-            {
-                ViewBag.Categorias = new SelectList(Enumerable.Empty<SelectListItem>());
-            }
-
+            ViewBag.Categorias = await BuscarCategorias();
             return View();
         }
         [HttpPost("criar")]
@@ -130,43 +134,27 @@ namespace MBA.Marketplace.Web.Controllers
         [HttpGet("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id)
         {
-            var token = HttpContext.Request.Cookies["AccessToken"];
-            var client = _httpClientFactory.CreateClient();
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
-            var response = await client.GetAsync($"https://localhost:7053/api/categorias/{id}");
-
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
+            var response = await client.GetAsync($"https://localhost:7053/api/produtos/{id}");
             if (!response.IsSuccessStatusCode)
             {
                 ViewBag.RegistroNaoEncontrado = true;
                 return View();
             }
 
-            var categoria = await response.Content.ReadFromJsonAsync<CategoriaFormViewModel>();
-            return View(categoria);
+            ViewBag.Categorias = await BuscarCategorias();
+            var produto = await response.Content.ReadFromJsonAsync<ProdutoViewModel>();
+            var model = _mapper.Map<ProdutoFormViewModel>(produto);
+            return View(model);
         }
         [HttpPost("editar/{id:Guid}")]
-        public async Task<IActionResult> Editar(Guid id, CategoriaFormViewModel model)
+        public async Task<IActionResult> Editar(Guid id, ProdutoFormViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var token = HttpContext.Request.Cookies["AccessToken"];
-            var client = _httpClientFactory.CreateClient();
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
-            var response = await client.PutAsJsonAsync($"https://localhost:7053/api/categorias/{model.Id}", model);
-
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
+            var response = await client.PutAsJsonAsync($"https://localhost:7053/api/categorias/{id}", model);
             if (response.IsSuccessStatusCode)
             {
                 ViewBag.RegistroSucesso = true;

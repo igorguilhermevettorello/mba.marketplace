@@ -1,13 +1,10 @@
-﻿using MBA.Marketplace.API.Services;
-using MBA.Marketplace.API.Services.Interfaces;
+﻿using MBA.Marketplace.API.Services.Interfaces;
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
 using System.Security.Claims;
 
 namespace MBA.Marketplace.API.Controllers
@@ -19,11 +16,12 @@ namespace MBA.Marketplace.API.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IProdutoService _produtoService;
-
-        public ProdutoController(ApplicationDbContext context, IProdutoService produtoService)
+        private readonly IWebHostEnvironment _env;
+        public ProdutoController(ApplicationDbContext context, IProdutoService produtoService, IWebHostEnvironment env)
         {
             _context = context;
             _produtoService = produtoService;
+            _env = env;
         }
         private async Task<Vendedor> BuscarVendedorLogado()
         {
@@ -46,6 +44,18 @@ namespace MBA.Marketplace.API.Controllers
                 throw new ArgumentException("Categoria não é válido.");
 
             return categoria;
+        }
+        private string GetContentType(string path)
+        {
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+
+            return ext switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                _ => "application/octet-stream"
+            };
         }
         [HttpPost]
         public async Task<IActionResult> Criar([FromForm] ProdutoDto dto)
@@ -71,6 +81,7 @@ namespace MBA.Marketplace.API.Controllers
             var vendedor = await BuscarVendedorLogado();
             var produto = await _produtoService.ObterPorIdAsync(id, vendedor);
             if (produto == null) return NotFound();
+
             return Ok(produto);
         }
         [HttpPut("{id:guid}")]
@@ -97,6 +108,20 @@ namespace MBA.Marketplace.API.Controllers
                 return NotFound();
 
             return NoContent();
+        }
+        [HttpGet("imagem/{nome}")]
+        [AllowAnonymous]
+        public IActionResult ObterImagem(string nome)
+        {
+            var caminho = Path.Combine(_env.WebRootPath, "images", "produtos", nome);
+
+            if (!System.IO.File.Exists(caminho))
+                return NotFound("Imagem não encontrada.");
+
+            var contentType = GetContentType(caminho);
+
+            var imagem = System.IO.File.OpenRead(caminho);
+            return File(imagem, contentType);
         }
     }
 }

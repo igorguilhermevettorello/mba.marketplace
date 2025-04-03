@@ -28,5 +28,7 @@ namespace MBA.Marketplace.Core.Entities
         public Vendedor Vendedor { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        [NotMapped]
+        public string Src { get; set; }
     }
 }

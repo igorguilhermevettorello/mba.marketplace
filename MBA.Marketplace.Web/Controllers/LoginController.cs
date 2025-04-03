@@ -14,13 +14,11 @@ namespace MBA.Marketplace.Web.Controllers
             _logger = logger;
             _httpClientFactory = httpClientFactory; 
         }
-
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel model)
         {
@@ -68,7 +66,6 @@ namespace MBA.Marketplace.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
         [HttpGet]
         public IActionResult Logout()
         {

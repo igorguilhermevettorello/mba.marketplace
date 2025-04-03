@@ -1,7 +1,10 @@
 ﻿using MBA.Marketplace.API.Services.Interfaces;
 using MBA.Marketplace.Core.DTOs;
+using MBA.Marketplace.Core.Enums;
+using MBA.Marketplace.Core.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 
 namespace MBA.Marketplace.API.Controllers
 {
@@ -54,10 +57,16 @@ namespace MBA.Marketplace.API.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Remover(Guid id)
         {
-            var sucesso = await _categoriaService.RemoverAsync(id);
-            if (!sucesso)
+            var status = await _categoriaService.RemoverAsync(id);
+            if (status == StatusRemocaoEnum.NaoEncontrado)
                 return NotFound();
 
+            if (status == StatusRemocaoEnum.VinculacaoProduto)
+            {
+                var mensagem = status.GetDescription();
+                return Conflict(new { mensagem });
+            }
+            
             return NoContent();
         }
     }

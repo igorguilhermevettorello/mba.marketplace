@@ -67,9 +67,9 @@ else
             <div class="modal-header bg-light border-0">
                 <h5 class="modal-title" id="resultadoTitulo">Resultado</h5>
             </div>
-            <div class="modal-body" id="resultadoMensagem"></div>
+            <div class="modal-body text-secondary small" id="resultadoMensagem"></div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+                <button type="button" class="btn btn-success btn-sm btn-modal-ajax" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
             </div>
         </div>
     </div>
@@ -102,9 +102,10 @@ else
                     $('#modalConfirmar').modal('hide');
                     showResultado("Categoria removida com sucesso!", true);
                 },
-                error: function () {
+                error: function (err) {
+                    let mensagem = err.responseText || "Erro ao remover categoria. Tente novamente.";
                     $('#modalConfirmar').modal('hide');
-                    showResultado("Erro ao remover categoria. Tente novamente.", false);
+                    showResultado(mensagem, false);
                 },
                 complete: function () {
                     $('#spinner').addClass('d-none');
@@ -114,8 +115,24 @@ else
         };
 
         function showResultado(mensagem, sucesso) {
-            $('#resultadoTitulo').text(sucesso ? 'Sucesso' : 'Erro');
-            $('#resultadoMensagem').text(mensagem);
+            if (sucesso) {
+                $("#modalResultado").find(".modal-header").html(`<h5 class="modal-title text-success fw-semibold">
+                    <i class="bi bi-check-circle me-2"></i> Remoção da categoria
+                </h5>`);
+
+                $("#resultadoMensagem").html(mensagem);
+
+                $(".btn-modal-ajax").removeClass("btn-danger").addClass("btn-success");
+            } else {
+                $("#modalResultado").find(".modal-header").html(`<h5 class="modal-title text-danger fw-semibold">
+                    <i class="bi bi-x-circle me-2"></i> Falha ao remover a categoria
+                </h5>`);
+                
+                $("#resultadoMensagem").html(mensagem);
+
+                $(".btn-modal-ajax").removeClass("btn-success").addClass("btn-danger")
+            }
+
             const modalResultado = new bootstrap.Modal(document.getElementById('modalResultado'));
             modalResultado.show();
         }
