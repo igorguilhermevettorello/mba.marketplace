@@ -2,6 +2,8 @@
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Data.Data;
+using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MBA.Marketplace.API.Services
 {
@@ -15,7 +17,15 @@ namespace MBA.Marketplace.API.Services
             _context = context;
             _env = env;
         }
-
+        public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
+        {
+            return await _context
+                .Produtos
+                .Include(p => p.Categoria)
+                .Include(p => p.Vendedor)
+                .Where(p => p.VendedorId == vendedor.Id)
+                .ToListAsync();
+        }
         public async Task<Produto> CriarAsync(ProdutoDto dto, Vendedor vendedor)
         {
             
@@ -48,6 +58,52 @@ namespace MBA.Marketplace.API.Services
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
             return produto;
+        }
+        public async Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor)
+        {
+            return await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+        }
+        public async Task<bool> AtualizarAsync(Guid id, ProdutoDto dto, Vendedor vendedor)
+        {
+            var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            if (produto == null)
+                return false;
+
+            string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);
+            string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
+
+            if (!Directory.Exists(caminhoPasta))
+                Directory.CreateDirectory(caminhoPasta);
+
+            string caminhoArquivo = Path.Combine(caminhoPasta, nomeArquivo);
+
+            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+            {
+                await dto.Imagem.CopyToAsync(stream);
+            }
+
+            produto.Nome = dto.Nome;
+            produto.Descricao = dto.Descricao;
+            produto.Preco = (decimal)dto.Preco;
+            produto.Estoque = (int)dto.Estoque;
+            produto.CategoriaId = (Guid)dto.CategoriaId;
+            produto.VendedorId = vendedor.Id;
+            produto.Imagem = nomeArquivo;
+            produto.UpdatedAt = DateTime.Now;
+
+            _context.Produtos.Update(produto);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> RemoverAsync(Guid id, Vendedor vendedor)
+        {
+            var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            if (produto == null)
+                return false;
+
+            _context.Produtos.Remove(produto);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -8,7 +8,9 @@
         public decimal? Preco { get; set; }
         public int? Estoque { get; set; }
         public Guid? CategoriaId { get; set; }
-        public string Categoria { get; set; }
-        public string Imagem { get; set; } 
+        public CategoriaViewModel Categoria { get; set; }
+        public string Imagem { get; set; }
+        public Guid VendedorId { get; set; }
+        public VendedorViewModel Vendedor { get; set; }
     }
 }

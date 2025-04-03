@@ -61,7 +61,7 @@
             <button type="submit" class="btn btn-success btn-sm">
                 <i class="bi bi-save me-1"></i> Salvar
             </button>
-            <a href="@Url.Action("Index", "Produto")" class="btn btn-outline-secondary btn-sm">Cancelar</a>
+            <a href="@Url.Action("index", "produto")" class="btn btn-outline-secondary btn-sm">Cancelar</a>
         </div>
     </div>
 </form>
@@ -80,19 +80,9 @@
             });
 
             $('form').on('submit', function () {
-                const raw = $('.preco-mask').val()
-                    .replace(/\s/g, '')
-                    .replace('R$', '')
-                    .replace(/\./g, '')
-                    .replace(',', '.');
-
+                const raw = $('.preco-mask').val().replace("R$", "").split(".").join("").split(",").join(".").trim()
                 $('#PrecoReal').val(raw);
             });
-        });
-
-        $('form').on('submit', function () {
-            var raw = $('.preco-mask').val().replace('R$ ', '').replace('.', '').replace(',', '.');
-            $('.preco-mask').val(raw);
         });
     </script>
 }
@@ -110,7 +100,7 @@
                 </h5>
             </div>
             <div class="modal-body text-secondary small">
-                Seu produto foi criada com sucesso.
+                Seu produto foi criado com sucesso.
             </div>
             <div class="modal-footer bg-light border-0 rounded-bottom-3">
                 <a href="@Url.Action("index", "produto")" class="btn btn-success btn-sm px-4">

@@ -19,12 +19,10 @@ namespace MBA.Marketplace.Web.Controllers
             _httpClientFactory = httpClientFactory;
             _logger = logger;
         }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var client = _httpClientFactory.CreateClient();
-            client.AdicionarToken(HttpContext);
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
             var response = await client.GetAsync("https://localhost:7053/api/produtos");
 
             if (!response.IsSuccessStatusCode)
@@ -32,11 +30,10 @@ namespace MBA.Marketplace.Web.Controllers
                 ViewBag.Erro = "Erro ao carregar produtos.";
                 return View(new List<ProdutoViewModel>());
             }
-
+            
             var produtos = await response.Content.ReadFromJsonAsync<List<ProdutoViewModel>>();
             return View(produtos);
         }
-
         [HttpGet("criar")]
         public async Task<IActionResult> Criar()
         {
@@ -55,7 +52,6 @@ namespace MBA.Marketplace.Web.Controllers
 
             return View();
         }
-
         [HttpPost("criar")]
         public async Task<IActionResult> Criar(ProdutoFormViewModel model)
         {
@@ -131,7 +127,6 @@ namespace MBA.Marketplace.Web.Controllers
                 }
             }
         }
-
         [HttpGet("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id)
         {
@@ -155,7 +150,6 @@ namespace MBA.Marketplace.Web.Controllers
             var categoria = await response.Content.ReadFromJsonAsync<CategoriaFormViewModel>();
             return View(categoria);
         }
-
         [HttpPost("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id, CategoriaFormViewModel model)
         {
@@ -213,25 +207,16 @@ namespace MBA.Marketplace.Web.Controllers
                 return View(model);
             }
         }
-
         [HttpDelete("deletar/{id:Guid}")]
         public async Task<IActionResult> Deletar(Guid id)
         {
-            var token = HttpContext.Request.Cookies["AccessToken"];
-            var client = _httpClientFactory.CreateClient();
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
-            var response = await client.DeleteAsync($"https://localhost:7053/api/categorias/{id}");
+            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
+            var response = await client.DeleteAsync($"https://localhost:7053/api/produtos/{id}");
 
             if (response.IsSuccessStatusCode)
                 return Ok();
 
-            return BadRequest("Erro ao excluir categoria.");
+            return BadRequest("Erro ao excluir produto.");
         }
     }
 }

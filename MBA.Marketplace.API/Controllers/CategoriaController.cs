@@ -26,24 +26,19 @@ namespace MBA.Marketplace.API.Controllers
             var categoria = await _categoriaService.CriarAsync(dto);
             return CreatedAtAction(null, new { id = categoria.Id }, categoria);
         }
-
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
             var categorias = await _categoriaService.ListarAsync();
             return Ok(categorias);
         }
-
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> ObterPorId(Guid id)
         {
             var categoria = await _categoriaService.ObterPorIdAsync(id);
-            if (categoria == null)
-                return NotFound();
-
+            if (categoria == null) return NotFound();
             return Ok(categoria);
         }
-
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, CategoriaDto dto)
         {
@@ -56,7 +51,6 @@ namespace MBA.Marketplace.API.Controllers
 
             return NoContent();
         }
-
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Remover(Guid id)
         {
@@ -66,6 +60,5 @@ namespace MBA.Marketplace.API.Controllers
 
             return NoContent();
         }
-
     }
 }

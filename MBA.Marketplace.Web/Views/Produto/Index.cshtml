@@ -1,5 +1,131 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using MBA.Marketplace.Web.ViewModels;
+@model List<ProdutoViewModel>
 @{
+    ViewData["Title"] = "Listar Produtos";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Erro))
+{
+    <div class="alert alert-danger">@ViewBag.Erro</div>
+}
+else
+{
+    <table class="table table-sm table-hover align-middle">
+        <thead class="table-light border-bottom">
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Categoria</th>
+                <th>Imagem</th>
+                <th style="width: 120px;" class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var produto in Model)
+            {
+                <tr class="border-bottom border-secondary-subtle">
+                    <td class="fw-semibold">@produto.Nome</td>
+                    <td class="text-muted">@produto.Descricao</td>
+                    <td class="text-muted">@produto.Preco</td>
+                    <td class="text-muted">@produto.Estoque</td>
+                    <td class="text-muted">@produto.Categoria.Nome</td>
+                    <td class="text-muted">@produto.Imagem</td>
+                    <td class="text-end">
+                        <a class="btn btn-outline-success btn-sm me-1" title="Editar" href="@Url.Action("editar", "produto", new { id = produto.Id })" data-id="@produto.Id">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a onclick="deletarProduto(this, event)" class="btn btn-outline-danger btn-sm btn-remover" title="Remover" data-id="@produto.Id">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="modalConfirmar" tabindex="-1" aria-labelledby="confirmarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-sm">
+            <div class="modal-header bg-warning-subtle border-0">
+                <h5 class="modal-title" id="confirmarLabel">Confirmar remoção</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja remover este produto?
+                <div id="spinner" class="text-center mt-3 d-none">
+                    <div class="spinner-border text-warning" role="status"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="btnConfirmarRemocao" onclick="confirmacaoDeletarCategoria(this, event)" class="btn btn-danger btn-sm">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de feedback -->
+<div class="modal fade" id="modalResultado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-sm">
+            <div class="modal-header bg-light border-0">
+                <h5 class="modal-title" id="resultadoTitulo">Resultado</h5>
+            </div>
+            <div class="modal-body" id="resultadoMensagem"></div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="location.reload()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let produtoId = null;
+        let url = "@Url.Action("deletar", "produto")";
+
+        function deletarProduto(element, event) {
+            event.preventDefault();
+            produtoId = $(element).data('id');
+            const modal = new bootstrap.Modal(document.getElementById('modalConfirmar'));
+            modal.show();
+        }
+
+        function confirmacaoDeletarCategoria(element, event) {
+            event.preventDefault();
+
+            if (!produtoId) return;
+
+            $('#spinner').removeClass('d-none');
+            $('#btnConfirmarRemocao').prop('disabled', true);
+
+            $.ajax({
+                url: `${url}/${produtoId}`,
+                type: 'DELETE',
+                success: function () {
+                    $('#modalConfirmar').modal('hide');
+                    showResultado("Produto removido com sucesso!", true);
+                },
+                error: function () {
+                    $('#modalConfirmar').modal('hide');
+                    showResultado("Erro ao remover produto. Tente novamente.", false);
+                },
+                complete: function () {
+                    $('#spinner').addClass('d-none');
+                    $('#btnConfirmarRemocao').prop('disabled', false);
+                }
+            });
+        };
+
+        function showResultado(mensagem, sucesso) {
+            $('#resultadoTitulo').text(sucesso ? 'Sucesso' : 'Erro');
+            $('#resultadoMensagem').text(mensagem);
+            const modalResultado = new bootstrap.Modal(document.getElementById('modalResultado'));
+            modalResultado.show();
+        }
+    </script>
 }
