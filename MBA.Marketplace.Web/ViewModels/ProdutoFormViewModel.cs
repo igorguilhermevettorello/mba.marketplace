@@ -18,7 +18,7 @@ namespace MBA.Marketplace.Web.ViewModels
         public int? Estoque { get; set; }
         [Required(ErrorMessage = "A Categoria é obrigatória.")]
         public Guid? CategoriaId { get; set; }
-        [Required(ErrorMessage = "A Imagem é obrigatória.")]
+        //[Required(ErrorMessage = "A Imagem é obrigatória.")]
         public IFormFile Imagem { get; set; }
         public string Src { get; set; }
     }

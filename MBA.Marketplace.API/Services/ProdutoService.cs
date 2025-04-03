@@ -70,24 +70,30 @@ namespace MBA.Marketplace.API.Services
             
             return produto;
         }
-        public async Task<bool> AtualizarAsync(Guid id, ProdutoDto dto, Vendedor vendedor)
+        public async Task<bool> AtualizarAsync(Guid id, ProdutoEditDto dto, Vendedor vendedor, IFormFile? imagem)
         {
             var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
             if (produto == null)
                 return false;
 
-            string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);
-            string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
-
-            if (!Directory.Exists(caminhoPasta))
-                Directory.CreateDirectory(caminhoPasta);
-
-            string caminhoArquivo = Path.Combine(caminhoPasta, nomeArquivo);
-
-            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+            if (imagem != null)
             {
-                await dto.Imagem.CopyToAsync(stream);
+                string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(imagem.FileName);
+                string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
+
+                if (!Directory.Exists(caminhoPasta))
+                    Directory.CreateDirectory(caminhoPasta);
+
+                string caminhoArquivo = Path.Combine(caminhoPasta, nomeArquivo);
+
+                using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+                {
+                    await imagem.CopyToAsync(stream);
+                }
+
+                produto.Imagem = nomeArquivo;
             }
+            
 
             produto.Nome = dto.Nome;
             produto.Descricao = dto.Descricao;
@@ -95,7 +101,6 @@ namespace MBA.Marketplace.API.Services
             produto.Estoque = (int)dto.Estoque;
             produto.CategoriaId = (Guid)dto.CategoriaId;
             produto.VendedorId = vendedor.Id;
-            produto.Imagem = nomeArquivo;
             produto.UpdatedAt = DateTime.Now;
 
             _context.Produtos.Update(produto);

@@ -123,8 +123,23 @@ else
         };
 
         function showResultado(mensagem, sucesso) {
-            $('#resultadoTitulo').text(sucesso ? 'Sucesso' : 'Erro');
-            $('#resultadoMensagem').text(mensagem);
+            if (sucesso) {
+                $("#modalResultado").find(".modal-header").html(`<h5 class="modal-title text-success fw-semibold">
+                    <i class="bi bi-check-circle me-2"></i> Remoção do produto
+                </h5>`);
+
+                $("#resultadoMensagem").html(mensagem);
+
+                $(".btn-modal-ajax").removeClass("btn-danger").addClass("btn-success");
+            } else {
+                $("#modalResultado").find(".modal-header").html(`<h5 class="modal-title text-danger fw-semibold">
+                    <i class="bi bi-x-circle me-2"></i> Falha ao remover o produto
+                </h5>`);
+
+                $("#resultadoMensagem").html(mensagem);
+
+                $(".btn-modal-ajax").removeClass("btn-success").addClass("btn-danger")
+            }
             const modalResultado = new bootstrap.Modal(document.getElementById('modalResultado'));
             modalResultado.show();
         }

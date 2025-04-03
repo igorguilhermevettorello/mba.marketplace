@@ -1,10 +1,12 @@
 ﻿using MBA.Marketplace.API.Services.Interfaces;
+using MBA.Marketplace.Core.Attributes;
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace MBA.Marketplace.API.Controllers
@@ -85,14 +87,23 @@ namespace MBA.Marketplace.API.Controllers
             return Ok(produto);
         }
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Atualizar(Guid id, ProdutoDto dto)
+        public async Task<IActionResult> Atualizar(Guid id, [FromForm] ProdutoEditDto dto, IFormFile? imagem)
         {
+            ModelState.Remove("imagem");
+            if (imagem != null)
+            {
+                var validador = new ImagemAttribute();
+                var resultado = validador.GetValidationResult(imagem, new ValidationContext(imagem));
+                if (resultado != ValidationResult.Success)
+                    ModelState.AddModelError("Imagem", resultado.ErrorMessage);
+            }
+            
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var vendedor = await BuscarVendedorLogado();
 
-            var sucesso = await _produtoService.AtualizarAsync(id, dto, vendedor);
+            var sucesso = await _produtoService.AtualizarAsync(id, dto, vendedor, imagem);
             if (!sucesso)
                 return NotFound();
 

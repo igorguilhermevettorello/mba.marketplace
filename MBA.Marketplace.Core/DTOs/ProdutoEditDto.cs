@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace MBA.Marketplace.Core.DTOs
 {
-    public class ProdutoDto
+    public class ProdutoEditDto
     {
         [Required(ErrorMessage = "O {0} é obrigatório.")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "O {0} precisa ter entre {2} e {1} caracteres")]
@@ -23,9 +23,5 @@ namespace MBA.Marketplace.Core.DTOs
 
         [Required(ErrorMessage = "A Categoria é obrigatória.")]
         public Guid? CategoriaId { get; set; }
-
-        [Required(ErrorMessage = "A Imagem é obrigatória.")]
-        [Imagem(ErrorMessage = "Envie uma imagem válida (jpeg, png, gif, webp).")]
-        public IFormFile Imagem { get; set; } // Arquivo enviado
     }
 }

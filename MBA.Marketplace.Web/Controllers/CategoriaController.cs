@@ -107,7 +107,7 @@ namespace MBA.Marketplace.Web.Controllers
                 return View(model);
 
             var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.PutAsJsonAsync($"https://localhost:7053/api/categorias/{model.Id}", model);
+            var response = await client.PutAsJsonAsync($"https://localhost:7053/api/categorias/{id}", model);
 
             if (response.IsSuccessStatusCode)
             {

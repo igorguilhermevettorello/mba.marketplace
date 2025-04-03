@@ -8,7 +8,7 @@ namespace MBA.Marketplace.API.Services.Interfaces
         Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor);
         Task<Produto> CriarAsync(ProdutoDto dto, Vendedor vendedor);
         Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor);
-        Task<bool> AtualizarAsync(Guid id, ProdutoDto dto, Vendedor vendedor);
+        Task<bool> AtualizarAsync(Guid id, ProdutoEditDto dto, Vendedor vendedor, IFormFile? imagem);
         Task<bool> RemoverAsync(Guid id, Vendedor vendedor);
     }
 }
