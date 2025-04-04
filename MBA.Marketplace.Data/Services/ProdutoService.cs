@@ -1,27 +1,20 @@
-﻿using MBA.Marketplace.Core.Configurations;
-using MBA.Marketplace.Core.DTOs;
+﻿using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
-using MBA.Marketplace.Core.Services.Interfaces;
 using MBA.Marketplace.Data.Data;
 using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace MBA.Marketplace.Data.Services
 {
     public class ProdutoService : IProdutoService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IAppEnvironment _env;
-        private readonly AppSettings _settings;
         private readonly IConfiguration _config;
-        public ProdutoService(ApplicationDbContext context, IAppEnvironment env, IOptions<AppSettings> options, IConfiguration config)
+        public ProdutoService(ApplicationDbContext context, IConfiguration config)
         {
             _context = context;
-            _env = env;
-            _settings = options.Value;
             _config = config;
         }
         public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
@@ -35,10 +28,7 @@ namespace MBA.Marketplace.Data.Services
         }
         public async Task<Produto> CriarAsync(ProdutoDto dto, Vendedor vendedor)
         {
-            
-            // Salvar imagem
             string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);
-            //string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
             var pasta = _config["SharedFiles:ImagensPath"];
             string caminhoPasta = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, pasta);
 
@@ -71,8 +61,8 @@ namespace MBA.Marketplace.Data.Services
         public async Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor)
         {
             var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
-            if (produto != null) 
-                produto.Src = $"{_settings.Url}/api/produtos/imagem/{produto.Imagem}";
+            //if (produto != null) 
+            //    produto.Src = $"{_settings.Url}/api/produtos/imagem/{produto.Imagem}";
             
             return produto;
         }
@@ -85,7 +75,8 @@ namespace MBA.Marketplace.Data.Services
             if (imagem != null)
             {
                 string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(imagem.FileName);
-                string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
+                var pasta = _config["SharedFiles:ImagensPath"];
+                string caminhoPasta = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, pasta);
 
                 if (!Directory.Exists(caminhoPasta))
                     Directory.CreateDirectory(caminhoPasta);

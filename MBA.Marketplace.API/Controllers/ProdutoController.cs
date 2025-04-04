@@ -19,11 +19,13 @@ namespace MBA.Marketplace.API.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IProdutoService _produtoService;
         private readonly IWebHostEnvironment _env;
-        public ProdutoController(ApplicationDbContext context, IProdutoService produtoService, IWebHostEnvironment env)
+        private readonly IConfiguration _config;
+        public ProdutoController(ApplicationDbContext context, IProdutoService produtoService, IWebHostEnvironment env, IConfiguration config)
         {
             _context = context;
             _produtoService = produtoService;
             _env = env;
+            _config = config;
         }
         private async Task<Vendedor> BuscarVendedorLogado()
         {
@@ -39,13 +41,7 @@ namespace MBA.Marketplace.API.Controllers
         }
         private async Task<Categoria> BuscarCategoria(Guid? id)
         {
-            var categoria = await _context.Categorias
-                    .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (categoria == null)
-                throw new ArgumentException("Categoria não é válido.");
-
-            return categoria;
+            return await _context.Categorias.FirstOrDefaultAsync(c => c.Id == id);
         }
         private string GetContentType(string path)
         {
@@ -60,17 +56,24 @@ namespace MBA.Marketplace.API.Controllers
             };
         }
         [HttpPost]
+        [ProducesResponseType(typeof(Produto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Criar([FromForm] ProdutoDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var vendedor = await BuscarVendedorLogado();
+
             var categoria = await BuscarCategoria(dto.CategoriaId);
+            if (categoria == null) 
+                return BadRequest(new { mensagem = "Categoria não é válida." });
+
             var produto = await _produtoService.CriarAsync(dto, vendedor);
             return CreatedAtAction(null, new { id = produto.Id }, produto);
         }
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Produto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Listar()
         {
             var vendedor = await BuscarVendedorLogado();
@@ -78,6 +81,8 @@ namespace MBA.Marketplace.API.Controllers
             return Ok(produtos);
         }
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(Produto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterPorId(Guid id)
         {
             var vendedor = await BuscarVendedorLogado();
@@ -87,6 +92,9 @@ namespace MBA.Marketplace.API.Controllers
             return Ok(produto);
         }
         [HttpPut("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Atualizar(Guid id, [FromForm] ProdutoEditDto dto, IFormFile? imagem)
         {
             ModelState.Remove("imagem");
@@ -103,6 +111,9 @@ namespace MBA.Marketplace.API.Controllers
 
             var vendedor = await BuscarVendedorLogado();
 
+            var categoria = await BuscarCategoria(dto.CategoriaId);
+            if (categoria == null) return BadRequest(new { mensagem = "Categoria não é válida." });
+
             var sucesso = await _produtoService.AtualizarAsync(id, dto, vendedor, imagem);
             if (!sucesso)
                 return NotFound();
@@ -110,6 +121,8 @@ namespace MBA.Marketplace.API.Controllers
             return NoContent();
         }
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remover(Guid id)
         {
             var vendedor = await BuscarVendedorLogado();
@@ -122,9 +135,12 @@ namespace MBA.Marketplace.API.Controllers
         }
         [HttpGet("imagem/{nome}")]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult ObterImagem(string nome)
         {
-            var caminho = Path.Combine(_env.WebRootPath, "images", "produtos", nome);
+            var pasta = _config["SharedFiles:ImagensPath"];
+            string caminhoPasta = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, pasta);
+            var caminho = Path.Combine(caminhoPasta, nome);
 
             if (!System.IO.File.Exists(caminho))
                 return NotFound("Imagem não encontrada.");

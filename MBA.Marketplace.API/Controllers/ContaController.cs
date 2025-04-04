@@ -26,6 +26,8 @@ namespace MBA.Marketplace.API.Controllers
         }
 
         [HttpPost("registrar")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegistrarUsuarioDto dto)
         {
             if (!ModelState.IsValid)
@@ -70,6 +72,9 @@ namespace MBA.Marketplace.API.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             if (!ModelState.IsValid)

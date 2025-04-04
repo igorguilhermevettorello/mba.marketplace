@@ -2,7 +2,6 @@
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Web.ViewModels;
 
-
 namespace MBA.Marketplace.Web.Mappings
 {
     public class AutoMapperProfile : Profile
@@ -23,6 +22,10 @@ namespace MBA.Marketplace.Web.Mappings
                 .ForMember(dest => dest.Src, opt => opt.MapFrom(src => src.Imagem))
                 .ForMember(dest => dest.Imagem, opt => opt.Ignore())
                 .ForMember(dest => dest.Vendedor, opt => opt.Ignore());
+
+            CreateMap<Produto, ProdutoFormViewModel>()
+                .ForMember(dest => dest.Src, opt => opt.MapFrom(src => src.Imagem))
+                .ForMember(dest => dest.Imagem, opt => opt.Ignore());
 
         }
     }

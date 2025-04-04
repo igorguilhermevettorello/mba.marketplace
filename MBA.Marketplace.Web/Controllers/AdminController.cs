@@ -1,5 +1,4 @@
-﻿using MBA.Marketplace.Web.Filters;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MBA.Marketplace.Web.Controllers

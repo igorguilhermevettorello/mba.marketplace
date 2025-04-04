@@ -1,5 +1,5 @@
-﻿using MBA.Marketplace.Infra.Services.Interfaces;
-using MBA.Marketplace.Infra.Services;
+﻿using MBA.Marketplace.Data.Services.Interfaces;
+using MBA.Marketplace.Data.Services;
 using MBA.Marketplace.Core.Models;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,22 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = jwtSettings["SecretKey"];
-
-//// Add services to the container.
-//// Decide se vai usar SQL Server ou SQLite
-//var useSqlServer = builder.Configuration.GetValue<bool>("UseSqlServer");
-//var connectionString = builder.Configuration.GetConnectionString(
-//    useSqlServer ? "DefaultConnectionSqlServer" : "DefaultConnectionSqlite"
-//);
-
-//// Adiciona DbContext com base no banco correto
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//{
-//    if (useSqlServer)
-//        options.UseSqlServer(connectionString);
-//    else
-//        options.UseSqlite(connectionString);
-//});
 
 if (builder.Environment.IsDevelopment())
 {

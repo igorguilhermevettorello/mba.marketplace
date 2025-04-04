@@ -57,11 +57,10 @@
                     <input name="Imagem" id="Imagem" type="file" class="form-control" accept="image/*" />
                     <span asp-validation-for="Imagem" class="text-danger small"></span>
                     <div class="mt-2">
-                        <img src="@Model.Src"
+                        <img src="/imagens/@Model.Src"
                              alt="@Model.Nome"
                              class="img-thumbnail"
                              id="previewImagem"
-                             onerror="this.src='/images/sem-imagem.png'"
                              style="max-width: 150px;" />
                     </div>
                     <input type="hidden" name="Src" value="@Model.Src" />
@@ -82,6 +81,7 @@
 
     <script>
         $(document).ready(function () {
+            debugger;
             let preco = "@Model.Preco.ToPtBrCurrency()";
 
             $('.preco-mask').maskMoney({
@@ -173,6 +173,38 @@
                 </div>
                 <div class="modal-body text-secondary small">
                     Ocorreu um erro ao realizar a atualização do produto. Tente novamente mais tarde!
+                </div>
+                <div class="modal-footer bg-light border-0 rounded-bottom-3">
+                    <a href="@Url.Action("index", "produto")" class="btn btn-danger btn-sm px-4">
+                        Ok
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop manual -->
+    <div class="modal-backdrop fade show"></div>
+
+    <script>
+        // Impede que o modal feche com tecla ESC ou clique fora
+        document.body.classList.add('modal-open');
+        document.body.style.paddingRight = '0px';
+    </script>
+}
+
+@if (ViewBag.RegistroNaoEncontrado == true)
+{
+    <div class="modal fade show" id="modalSucesso" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-sm border-0 rounded-3">
+                <div class="modal-header bg-light border-0 rounded-top-3">
+                    <h5 class="modal-title text-danger fw-semibold">
+                        <i class="bi bi-x-circle me-2"></i> Falha ao localizar produto
+                    </h5>
+                </div>
+                <div class="modal-body text-secondary small">
+                    Produto não encontrada.
                 </div>
                 <div class="modal-footer bg-light border-0 rounded-bottom-3">
                     <a href="@Url.Action("index", "produto")" class="btn btn-danger btn-sm px-4">

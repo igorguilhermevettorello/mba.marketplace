@@ -1,7 +1,8 @@
 ﻿using MBA.Marketplace.Core.DTOs;
+using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Core.Enums;
 using MBA.Marketplace.Core.Extensions;
-using MBA.Marketplace.Infra.Services.Interfaces;
+using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,8 @@ namespace MBA.Marketplace.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(Categoria), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Criar(CategoriaDto dto)
         {
             if (!ModelState.IsValid)
@@ -29,12 +32,15 @@ namespace MBA.Marketplace.API.Controllers
             return CreatedAtAction(null, new { id = categoria.Id }, categoria);
         }
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Categoria>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Listar()
         {
             var categorias = await _categoriaService.ListarAsync();
             return Ok(categorias);
         }
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(Categoria), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterPorId(Guid id)
         {
             var categoria = await _categoriaService.ObterPorIdAsync(id);
@@ -42,6 +48,9 @@ namespace MBA.Marketplace.API.Controllers
             return Ok(categoria);
         }
         [HttpPut("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Atualizar(Guid id, CategoriaDto dto)
         {
             if (!ModelState.IsValid)
@@ -54,6 +63,9 @@ namespace MBA.Marketplace.API.Controllers
             return NoContent();
         }
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remover(Guid id)
         {
             var status = await _categoriaService.RemoverAsync(id);

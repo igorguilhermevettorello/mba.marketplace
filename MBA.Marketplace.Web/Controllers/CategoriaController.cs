@@ -3,7 +3,6 @@ using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Enums;
 using MBA.Marketplace.Core.Extensions;
 using MBA.Marketplace.Data.Services.Interfaces;
-using MBA.Marketplace.Web.Filters;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
