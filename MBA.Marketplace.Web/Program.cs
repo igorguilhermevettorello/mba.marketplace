@@ -91,7 +91,7 @@ app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "../MBA.Marketplace.Web/Imagens")),
+        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "../mba.marketplace/Imagens")),
     RequestPath = "/imagens"
 });
 

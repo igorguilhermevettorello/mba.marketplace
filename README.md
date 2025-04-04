@@ -38,10 +38,11 @@ O projeto consiste em:
 
 A estrutura do projeto é organizada da seguinte forma:
 
-- src/
-  - Blog.Web/ - Projeto MVC
-  - Blog.Api/ - API RESTful
-  - Blog.Data/ - Modelos de Dados e Configuração do EF Core
+- mba.marketplace/
+  - MBA.Marketplace.Web/ - Projeto MVC
+  - MBA.Marketplace.Api/ - API RESTful
+  - MBA.Marketplace.Data/ - Modelos de Dados e Configuração do EF Core
+  - MBA.Marketplace.Core/ - Contém entidades, interfaces, Enums, Utils
 - README.md - Arquivo de Documentação do Projeto
 - FEEDBACK.md - Arquivo para Consolidação dos Feedbacks
 - .gitignore - Arquivo de Ignoração do Git
@@ -59,7 +60,7 @@ A estrutura do projeto é organizada da seguinte forma:
 
 - .NET SDK 8.0 ou superior
 - SQL Server
-- SQLLite
+- SQLite
 - Visual Studio 2022 ou superior (ou qualquer IDE de sua preferência)
 - Git
 
@@ -70,18 +71,18 @@ A estrutura do projeto é organizada da seguinte forma:
    - `cd mba.marketplace`
 
 2. **Configuração do Banco de Dados:**
-   - No arquivo `appsettings.json`, configure a string de conexão do SQLLite e SQL Server.
+   - No arquivo `appsettings.json`, configure a string de conexão do SQLite e SQL Server.
    - Rode o projeto para que a configuração do Seed crie o banco e popule com os dados básicos
 
 3. **Executar a Aplicação MVC:**
    - `cd MBA.Marketplace.Web`
    - `dotnet run`
-   - Acesse a aplicação em: http://localhost:5000
+   - Acesse a aplicação em: https://localhost:7015/
 
 4. **Executar a API:**
-   - `cd MBA.Marketplace.Web`
+   - `cd MBA.Marketplace.API`
    - `dotnet run`
-   - Acesse a documentação da API em: http://localhost:5001/swagger
+   - Acesse a documentação da API em: https://localhost:7053/swagger/index.html
 
 ## **7. Instruções de Configuração**
 
@@ -92,7 +93,7 @@ A estrutura do projeto é organizada da seguinte forma:
 
 A documentação da API está disponível através do Swagger. Após iniciar a API, acesse a documentação em:
 
-http://localhost:5001/swagger
+https://localhost:7053/swagger/index.html
 
 ## **9. Avaliação**
 
