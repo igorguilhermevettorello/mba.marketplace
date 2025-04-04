@@ -97,6 +97,11 @@
             });
 
             $('.preco-mask').val(preco.replace("R$ ", ""));
+
+            var src = "@Model.Src";
+            if (src.trim() == "") {
+                $("#previewImagem").hide()
+            }
         });
 
         document.getElementById("Imagem").addEventListener("change", function () {

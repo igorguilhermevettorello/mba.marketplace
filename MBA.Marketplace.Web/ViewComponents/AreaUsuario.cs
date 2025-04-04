@@ -1,5 +1,7 @@
 ﻿using MBA.Marketplace.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace MBA.Marketplace.Web.ViewComponents
 {
@@ -7,11 +9,10 @@ namespace MBA.Marketplace.Web.ViewComponents
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            // Verifica se existe um cookie com o token de acesso
-            var token = HttpContext.Request.Cookies["AccessToken"];
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var areaUsuario = new AreaUsuarioModel();
 
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(userId))
             {
                 areaUsuario.Logado = true;
                 areaUsuario.Nome = string.Empty;

@@ -6,6 +6,7 @@ using MBA.Marketplace.Data.Data;
 using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace MBA.Marketplace.Data.Services
@@ -15,11 +16,13 @@ namespace MBA.Marketplace.Data.Services
         private readonly ApplicationDbContext _context;
         private readonly IAppEnvironment _env;
         private readonly AppSettings _settings;
-        public ProdutoService(ApplicationDbContext context, IAppEnvironment env, IOptions<AppSettings> options)
+        private readonly IConfiguration _config;
+        public ProdutoService(ApplicationDbContext context, IAppEnvironment env, IOptions<AppSettings> options, IConfiguration config)
         {
             _context = context;
             _env = env;
             _settings = options.Value;
+            _config = config;
         }
         public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
         {
@@ -35,7 +38,9 @@ namespace MBA.Marketplace.Data.Services
             
             // Salvar imagem
             string nomeArquivo = Guid.NewGuid().ToString() + Path.GetExtension(dto.Imagem.FileName);
-            string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
+            //string caminhoPasta = Path.Combine(_env.WebRootPath, "images", "produtos");
+            var pasta = _config["SharedFiles:ImagensPath"];
+            string caminhoPasta = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, pasta);
 
             if (!Directory.Exists(caminhoPasta))
                 Directory.CreateDirectory(caminhoPasta);

@@ -18,6 +18,12 @@ namespace MBA.Marketplace.Web.Mappings
             CreateMap<Categoria, CategoriaViewModel>();
 
             CreateMap<Categoria, CategoriaFormViewModel>();
+
+            CreateMap<Produto, ProdutoViewModel>()
+                .ForMember(dest => dest.Src, opt => opt.MapFrom(src => src.Imagem))
+                .ForMember(dest => dest.Imagem, opt => opt.Ignore())
+                .ForMember(dest => dest.Vendedor, opt => opt.Ignore());
+
         }
     }
 }

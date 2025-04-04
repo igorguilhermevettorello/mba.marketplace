@@ -1,4 +1,4 @@
-﻿using MBA.Marketplace.Infra.Services.Interfaces;
+﻿using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Core.Attributes;
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;

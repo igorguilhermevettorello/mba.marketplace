@@ -5,22 +5,21 @@ using MBA.Marketplace.Core.Extensions;
 using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Web.Filters;
 using MBA.Marketplace.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MBA.Marketplace.Web.Controllers
 {
     [Route("categoria")]
-    [Autorizado]
+    [Authorize]
     public class CategoriaController : Controller
     {
         private readonly ICategoriaService _categoriaService;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ProdutoController> _logger;
         private readonly IMapper _mapper;
-        public CategoriaController(ICategoriaService categoriaService, IHttpClientFactory httpClientFactory, ILogger<ProdutoController> logger, IMapper mapper) 
+        public CategoriaController(ICategoriaService categoriaService, ILogger<ProdutoController> logger, IMapper mapper) 
         {
             _categoriaService = categoriaService;
-            _httpClientFactory = httpClientFactory;
             _logger = logger;
             _mapper = mapper;
         }

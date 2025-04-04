@@ -8,6 +8,9 @@ using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +39,7 @@ builder.Services.AddScoped<IContaService, ContaService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
+builder.Services.AddScoped<IVendedorService, VendedorService>();
 
 builder.Services.AddScoped<IAppEnvironment, AppEnvironment>();
 
@@ -58,6 +62,12 @@ builder.Services
     .AddErrorDescriber<IdentityErrorDescriberPtBr>()
     .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+    options.LogoutPath = "/logout";
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -75,7 +85,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+//app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "../MBA.Marketplace.Web/Imagens")),
+    RequestPath = "/imagens"
+});
 
 app.UseRouting();
 

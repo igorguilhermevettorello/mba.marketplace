@@ -26,12 +26,12 @@ namespace MBA.Marketplace.Data.Services
             _configuration = configuration;
             _context = context;
         }
-        public async Task<(bool Success, string Token, IEnumerable<string> Errors)> LoginAsync(LoginDto dto)
+        public async Task<(bool Success, string Token, IEnumerable<string> Errors, string UserId)> LoginAsync(LoginDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Senha))
             {
-                return (false, null, new[] { "E-mail ou senha inválidos." });
+                return (false, null, new[] { "E-mail ou senha inválidos." }, null);
             }
 
             var claims = new List<Claim>
@@ -55,7 +55,7 @@ namespace MBA.Marketplace.Data.Services
 
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return (true, tokenString, Array.Empty<string>());
+            return (true, tokenString, Array.Empty<string>(), user.Id);
         }
 
         public async Task<RetornoRegistrarUsuarioDto> RegisterAsync(RegistrarUsuarioDto dto)
