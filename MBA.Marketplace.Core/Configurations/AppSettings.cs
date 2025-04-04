@@ -1,4 +1,4 @@
-﻿namespace MBA.Marketplace.API.Configurations
+﻿namespace MBA.Marketplace.Core.Configurations
 {
     public class AppSettings
     {

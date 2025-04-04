@@ -1,17 +1,18 @@
-﻿using MBA.Marketplace.Web.ViewModels;
+﻿using MBA.Marketplace.Core.DTOs;
+using MBA.Marketplace.Data.Services.Interfaces;
+using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace MBA.Marketplace.Web.Controllers
 {
     public class RegistrarController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
-        public RegistrarController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        private readonly IContaService _contaService;
+        public RegistrarController(ILogger<HomeController> logger, IContaService contaService)
         {
             _logger = logger;
-            _httpClientFactory = httpClientFactory; 
+            _contaService = contaService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -24,44 +25,36 @@ namespace MBA.Marketplace.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.PostAsJsonAsync("https://localhost:7053/api/conta/registrar", model);
+            var response = await _contaService.RegisterAsync(new RegistrarUsuarioDto
+            {
+                Nome = model.Nome,
+                Email = model.Email,
+                Senha = model.Senha,
+                ConfirmacaoSenha = model.ConfirmacaoSenha
+            });
 
-            if (response.IsSuccessStatusCode)
+            if (response.Status)
             {
                 ViewBag.RegistroSucesso = true;
                 return View();
             }
+
+            if (response.Error.Any())
+            {
+                foreach (var item in response.Error)
+                {
+                    if (item.Key == "Identity")
+                        ModelState.AddModelError(item.Key == string.Empty ? "" : item.Key, item.Value);
+                    else
+                        ModelState.AddModelError(item.Key, item.Value);
+                }
+            }
             else 
             {
-                // tenta ler os erros do ModelState da API
-                var content = await response.Content.ReadAsStringAsync();
-                var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(content, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                if (errors != null)
-                {
-                    foreach (var field in errors)
-                    {
-                        foreach (var errorMsg in field.Value)
-                        {
-                            if (field.Key == "Identity")
-                                ModelState.AddModelError(field.Key == string.Empty ? "" : field.Key, errorMsg);
-                            else
-                                ModelState.AddModelError(field.Key, errorMsg);
-                        }
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Erro desconhecido ao registrar.");
-                    ViewBag.RegistroErro = true;
-                }
-
-                return View(model);
+                ViewBag.RegistroErro = true;
             }
+
+            return View(model);
         }
     }
 }

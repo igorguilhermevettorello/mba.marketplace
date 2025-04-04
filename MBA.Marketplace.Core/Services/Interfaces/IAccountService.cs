@@ -1,6 +1,6 @@
 ﻿using MBA.Marketplace.Core.DTOs;
 
-namespace MBA.Marketplace.API.Services.Interfaces
+namespace MBA.Marketplace.Core.Services.Interfaces
 {
     public interface IAccountService
     {

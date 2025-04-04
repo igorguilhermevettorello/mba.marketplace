@@ -1,11 +1,11 @@
-﻿using MBA.Marketplace.API.Services.Interfaces;
-using MBA.Marketplace.Core.DTOs;
+﻿using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Core.Enums;
 using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MBA.Marketplace.API.Services
+namespace MBA.Marketplace.Data.Services
 {
     public class CategoriaService : ICategoriaService
     {

@@ -1,8 +1,11 @@
-﻿using MBA.Marketplace.Web.Filters;
-using MBA.Marketplace.Web.Helpers;
+﻿using AutoMapper;
+using MBA.Marketplace.Core.DTOs;
+using MBA.Marketplace.Core.Enums;
+using MBA.Marketplace.Core.Extensions;
+using MBA.Marketplace.Data.Services.Interfaces;
+using MBA.Marketplace.Web.Filters;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace MBA.Marketplace.Web.Controllers
 {
@@ -10,27 +13,23 @@ namespace MBA.Marketplace.Web.Controllers
     [Autorizado]
     public class CategoriaController : Controller
     {
+        private readonly ICategoriaService _categoriaService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ProdutoController> _logger;
-        public CategoriaController(IHttpClientFactory httpClientFactory, ILogger<ProdutoController> logger) 
+        private readonly IMapper _mapper;
+        public CategoriaController(ICategoriaService categoriaService, IHttpClientFactory httpClientFactory, ILogger<ProdutoController> logger, IMapper mapper) 
         {
+            _categoriaService = categoriaService;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.GetAsync("https://localhost:7053/api/categorias");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                ViewBag.Erro = "Erro ao carregar categorias.";
-                return View(new List<CategoriaViewModel>());
-            }
-
-            var categorias = await response.Content.ReadFromJsonAsync<List<CategoriaViewModel>>();
-            return View(categorias);
+            var categorias = await _categoriaService.ListarAsync();
+            var model = _mapper.Map<List<CategoriaViewModel>>(categorias);
+            return View(model);
         }
         [HttpGet("criar")]
         public IActionResult Criar()
@@ -40,140 +39,78 @@ namespace MBA.Marketplace.Web.Controllers
         [HttpPost("criar")]
         public async Task<IActionResult> Criar(CategoriaFormViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.PostAsJsonAsync("https://localhost:7053/api/categorias", model);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                ViewBag.RegistroSucesso = true;
-                return View();
-            }
-            else
-            {
-                // tenta ler os erros do ModelState da API
-                var content = await response.Content.ReadAsStringAsync();
-                if (string.IsNullOrEmpty(content))
-                {
-                    ModelState.AddModelError(string.Empty, "Erro desconhecido ao registrar.");
-                    ViewBag.RegistroErro = true;
+                if (!ModelState.IsValid)
                     return View(model);
-                }
 
-                var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(content, new JsonSerializerOptions
+                var _ = _categoriaService.CriarAsync(new CategoriaDto
                 {
-                    PropertyNameCaseInsensitive = true
+                    Nome = model.Nome,
+                    Descricao = model.Descricao
                 });
 
-                if (errors != null)
-                {
-                    foreach (var field in errors)
-                    {
-                        foreach (var errorMsg in field.Value)
-                        {    
-                            ModelState.AddModelError(field.Key, errorMsg);
-                        }
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Erro desconhecido ao registrar.");
-                    ViewBag.RegistroErro = true;
-                }
-
-                return View(model);
+                ViewBag.RegistroSucesso = true;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro desconhecido ao registrar.");
+                ViewBag.RegistroErro = true;
+            }
+
+            return View(model);
         }
         [HttpGet("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id)
         {
-            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.GetAsync($"https://localhost:7053/api/categorias/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            var categoria = await _categoriaService.ObterPorIdAsync(id);
+            if (categoria == null)
             {
                 ViewBag.RegistroNaoEncontrado = true;
                 return View();
             }
-            
-            var categoria = await response.Content.ReadFromJsonAsync<CategoriaFormViewModel>();
-            return View(categoria);
+
+            var model = _mapper.Map< CategoriaFormViewModel>(categoria);
+            return View(model);
         }
         [HttpPost("editar/{id:Guid}")]
         public async Task<IActionResult> Editar(Guid id, CategoriaFormViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.PutAsJsonAsync($"https://localhost:7053/api/categorias/{id}", model);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                ViewBag.RegistroSucesso = true;
-                return View();
-            }
-            else
-            {
-                // tenta ler os erros do ModelState da API
-                var content = await response.Content.ReadAsStringAsync();
-                if (string.IsNullOrEmpty(content))
-                {
-                    ModelState.AddModelError(string.Empty, "Erro desconhecido ao registrar.");
-                    ViewBag.RegistroErro = true;
+                if (!ModelState.IsValid)
                     return View(model);
-                }
 
-                var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(content, new JsonSerializerOptions
+                var response = await _categoriaService.AtualizarAsync(id, new CategoriaDto
                 {
-                    PropertyNameCaseInsensitive = true
+                    Nome = model.Nome,
+                    Descricao = model.Descricao
                 });
 
-                if (errors != null)
+                if (!response)
                 {
-                    foreach (var field in errors)
-                    {
-                        foreach (var errorMsg in field.Value)
-                        {
-                            ModelState.AddModelError(field.Key, errorMsg);
-                        }
-                    }
+                    ModelState.AddModelError("Nome", "Categoria não encontrada.");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Erro desconhecido ao registrar.");
-                    ViewBag.RegistroErro = true;
-                }
-
-                return View(model);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro desconhecido ao registrar.");
+                ViewBag.RegistroErro = true;
+            }
+
+            return View(model);
         }
         [HttpDelete("deletar/{id:Guid}")]
         public async Task<IActionResult> Deletar(Guid id)
         {
-            var client = HttpClientExtensions.CriarRequest(_httpClientFactory, HttpContext);
-            var response = await client.DeleteAsync($"https://localhost:7053/api/categorias/{id}");
+            var status = await _categoriaService.RemoverAsync(id);
+            if (status == StatusRemocaoEnum.NaoEncontrado)
+                return NotFound();
 
-            if (!response.IsSuccessStatusCode)
+            if (status == StatusRemocaoEnum.VinculacaoProduto)
             {
-                try
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    var resultado = JsonSerializer.Deserialize<MensagemErroViewModel>(content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    var mensagem = resultado?.Mensagem ?? "Erro ao excluir categoria.";
-
-                    return BadRequest(mensagem);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest("Erro ao excluir categoria.");
-                }
+                var mensagem = status.GetDescription();
+                return Conflict(new { mensagem });
             }
 
             return Ok();

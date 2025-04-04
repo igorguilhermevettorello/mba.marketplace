@@ -1,10 +1,9 @@
-﻿using MBA.Marketplace.API.Services.Interfaces;
-using MBA.Marketplace.Core.DTOs;
+﻿using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Enums;
 using MBA.Marketplace.Core.Extensions;
+using MBA.Marketplace.Infra.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
 
 namespace MBA.Marketplace.API.Controllers
 {

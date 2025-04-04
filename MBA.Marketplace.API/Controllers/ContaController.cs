@@ -1,11 +1,10 @@
-﻿using MBA.Marketplace.API.Services.Interfaces;
-using MBA.Marketplace.Core.DTOs;
+﻿using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Core.Models;
+using MBA.Marketplace.Core.Services.Interfaces;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.Eventing.Reader;
 
 namespace MBA.Marketplace.API.Controllers
 {

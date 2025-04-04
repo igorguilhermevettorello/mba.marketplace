@@ -1,20 +1,21 @@
-﻿using MBA.Marketplace.API.Configurations;
-using MBA.Marketplace.API.Services.Interfaces;
+﻿using MBA.Marketplace.Core.Configurations;
 using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
+using MBA.Marketplace.Core.Services.Interfaces;
 using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace MBA.Marketplace.API.Services
+namespace MBA.Marketplace.Data.Services
 {
     public class ProdutoService : IProdutoService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _env;
+        private readonly IAppEnvironment _env;
         private readonly AppSettings _settings;
-        public ProdutoService(ApplicationDbContext context, IWebHostEnvironment env, IOptions<AppSettings> options)
+        public ProdutoService(ApplicationDbContext context, IAppEnvironment env, IOptions<AppSettings> options)
         {
             _context = context;
             _env = env;

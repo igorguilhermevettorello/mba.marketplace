@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Web.ViewModels;
 
 
@@ -13,6 +14,10 @@ namespace MBA.Marketplace.Web.Mappings
 
             CreateMap<ProdutoFormViewModel, ProdutoViewModel>()
                 .ForMember(dest => dest.Imagem, opt => opt.Ignore());
+
+            CreateMap<Categoria, CategoriaViewModel>();
+
+            CreateMap<Categoria, CategoriaFormViewModel>();
         }
     }
 }

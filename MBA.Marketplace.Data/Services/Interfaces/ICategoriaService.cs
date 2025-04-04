@@ -2,7 +2,7 @@
 using MBA.Marketplace.Core.Entities;
 using MBA.Marketplace.Core.Enums;
 
-namespace MBA.Marketplace.API.Services.Interfaces
+namespace MBA.Marketplace.Data.Services.Interfaces
 {
     public interface ICategoriaService
     {

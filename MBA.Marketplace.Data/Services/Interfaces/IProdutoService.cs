@@ -1,7 +1,8 @@
 ﻿using MBA.Marketplace.Core.DTOs;
 using MBA.Marketplace.Core.Entities;
+using Microsoft.AspNetCore.Http;
 
-namespace MBA.Marketplace.API.Services.Interfaces
+namespace MBA.Marketplace.Data.Services.Interfaces
 {
     public interface IProdutoService
     {
