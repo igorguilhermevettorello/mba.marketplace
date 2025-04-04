@@ -17,7 +17,6 @@ out/
 Thumbs.db
 
 # ASP.NET Core
-appsettings.Development.json
 appsettings.Local.json
 appsettings.*.local.json
 appsettings.Production.json # (opcional, se tiver segredo)
@@ -49,7 +48,7 @@ dist/
 build/
 
 # EF Core
-Migrations/
+# Migrations/
 
 # JetBrains Rider
 .idea/
