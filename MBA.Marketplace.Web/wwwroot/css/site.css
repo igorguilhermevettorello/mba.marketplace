@@ -20,32 +20,3 @@ html {
 body {
   margin-bottom: 60px;
 }
-
-.input-group.dark-mode .form-select,
-.input-group.dark-mode .form-control {
-    background-color: #1e1e2f;
-    color: #fff;
-    border: 1px solid #444;
-}
-
-.input-group.dark-mode .form-select:focus,
-.input-group.dark-mode .form-control:focus {
-    background-color: #2a2a3f;
-    color: #fff;
-    border-color: #5bc0de;
-    box-shadow: none;
-}
-
-.input-group.dark-mode .btn-success {
-background-color: #28a745;
-border-color: #28a745;
-}
-
-.input-group.dark-mode .btn-success:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
-
-.modal-backdrop.show {
-    background-color: rgba(0, 0, 0, 0.75); /* fundo preto com 75% opacidade */
-}
