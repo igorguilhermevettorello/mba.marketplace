@@ -4,11 +4,11 @@
 {
     <div class="dropdown">
         <a href="" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-4 me-1"></i>
+            Menu &nbsp; <i class="bi bi-person-circle fs-4 me-1"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
             <li><a class="dropdown-item" asp-action="index" asp-controller="admin">Área administrativa</a></li>
-            <li><a class="dropdown-item" href="#">Sair</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("logout", "login")">Sair</a></li>
         </ul>
     </div>
 }
@@ -16,7 +16,7 @@ else
 {
     <div>
         <a asp-action="index" asp-controller="login"  class="d-flex align-items-center text-white text-decoration-none">
-            <i class="bi bi-person-circle fs-4 me-1"></i>
+            Login &nbsp; <i class="bi bi-person-circle fs-4 me-1"></i>
         </a>        
     </div>
 }

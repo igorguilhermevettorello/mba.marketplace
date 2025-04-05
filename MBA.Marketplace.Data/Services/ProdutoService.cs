@@ -17,6 +17,24 @@ namespace MBA.Marketplace.Data.Services
             _context = context;
             _config = config;
         }
+
+        public async Task<IEnumerable<Produto>> ListarAllAsync()
+        {
+            return await _context
+                    .Produtos
+                    .Include(p => p.Categoria)
+                    .Include(p => p.Vendedor)
+                    .ToListAsync();
+        }
+        public async Task<IEnumerable<Produto>> ListarProdutosPorCategoriaAsync(Guid categoriaId) 
+        {
+            return await _context
+                    .Produtos
+                    .Include(p => p.Categoria)
+                    .Include(p => p.Vendedor)
+                    .Where(p => p.CategoriaId == categoriaId)
+                    .ToListAsync();
+        }
         public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
         {
             return await _context

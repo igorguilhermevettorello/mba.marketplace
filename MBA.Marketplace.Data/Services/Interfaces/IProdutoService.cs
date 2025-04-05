@@ -6,6 +6,8 @@ namespace MBA.Marketplace.Data.Services.Interfaces
 {
     public interface IProdutoService
     {
+        Task<IEnumerable<Produto>> ListarAllAsync();
+        Task<IEnumerable<Produto>> ListarProdutosPorCategoriaAsync(Guid categoriaId);
         Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor);
         Task<Produto> CriarAsync(ProdutoDto dto, Vendedor vendedor);
         Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor);
