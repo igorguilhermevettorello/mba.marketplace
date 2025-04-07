@@ -35,6 +35,22 @@ namespace MBA.Marketplace.Data.Services
                     .Where(p => p.CategoriaId == categoriaId)
                     .ToListAsync();
         }
+        public async Task<IEnumerable<Produto>> ListarProdutosPorCategoriaOuNomeDescricaoAsync(Guid? categoriaId, string descricao)
+        {
+            var query = _context.Produtos.AsQueryable();
+
+            if (categoriaId != null)
+            {
+                query = query.Where(p => p.CategoriaId == categoriaId);
+            }
+
+            if (descricao != null)
+            {
+                query = query.Where(p => p.Nome.Contains(descricao));
+            }
+
+            return await query.ToListAsync();
+        }
         public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
         {
             return await _context
@@ -78,11 +94,16 @@ namespace MBA.Marketplace.Data.Services
         }
         public async Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor)
         {
-            var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
-            //if (produto != null) 
-            //    produto.Src = $"{_settings.Url}/api/produtos/imagem/{produto.Imagem}";
-            
-            return produto;
+            return await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+        }
+        public async Task<Produto> PublicObterPorIdAsync(Guid id)
+        {
+            return await _context
+                .Produtos
+                .Include(p => p.Categoria)
+                .Include(p => p.Vendedor)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
         }
         public async Task<bool> AtualizarAsync(Guid id, ProdutoEditDto dto, Vendedor vendedor, IFormFile? imagem)
         {

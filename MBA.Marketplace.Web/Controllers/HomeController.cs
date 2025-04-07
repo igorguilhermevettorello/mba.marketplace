@@ -23,10 +23,10 @@ namespace MBA.Marketplace.Web.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid? categoriaId, string? descricao)
         {
             ViewBag.Categorias = await _categoriaService.ListarAsync();
-            var produtos = await _produtoService.ListarAllAsync();
+            var produtos = await _produtoService.ListarProdutosPorCategoriaOuNomeDescricaoAsync(categoriaId, descricao);
             var model = _mapper.Map<List<ProdutoViewModel>>(produtos);
             return View(model);
         }

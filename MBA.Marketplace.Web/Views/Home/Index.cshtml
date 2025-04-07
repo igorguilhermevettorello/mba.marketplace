@@ -12,9 +12,9 @@
                 <div class="card h-100 box-produto">
 
                     <img
-                    src="/imagens/@produto.Src"
-                    class="card-img-top img-fluid box-imagem"
-                    alt="@produto.Nome"  />
+                        src="/imagens/@produto.Src"
+                        class="card-img-top img-fluid box-imagem"
+                        alt="@produto.Nome"  />
 
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title box-text">@produto.Nome</h5>
@@ -27,7 +27,7 @@
                                 Preço: <span class="text-success">@produto.Preco.ToPtBrCurrency()</span>
                             </p>
 
-                            <a href="@Url.Action("Detalhes", "Produto", new { id = produto.Id })" class="btn btn-success btn-sm w-100">
+                            <a href="@Url.Action("detalhes", "produto", new { id = produto.Id })" class="btn btn-success btn-sm w-100">
                                 Ver Detalhes
                             </a>
                         </div>
@@ -50,8 +50,17 @@
 
             $(".btn-buscar-produtos").click(function(event){
                 event.preventDefault();
-                console.log("buscar");
-            })
+                var categoria = $(".select-categorias").val().trim();
+                var descricao = $(".input-categorias").val().trim();
+
+                if (categoria != "" && descricao != "") {
+                    window.location.href = "/?categoriaId=" + categoria + "&descricao=" + descricao;
+                } else if (categoria != "") {
+                    window.location.href = "/?categoriaId=" + categoria;
+                } else if (descricao != "") {
+                    window.location.href = "/descricao=" + descricao;
+                }        
+            });
         </script>
     }
 }

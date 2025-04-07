@@ -166,5 +166,14 @@ namespace MBA.Marketplace.Web.Controllers
 
             return BadRequest("Erro ao excluir produto.");
         }
+        [HttpGet("detalhe/{id:Guid}")]
+        public async Task<IActionResult> Detalhes(Guid id)
+        {
+            var produto = await _produtoService.PublicObterPorIdAsync(id);
+            if (produto == null) return NotFound();
+
+            var viewModel = _mapper.Map<ProdutoViewModel>(produto); // ou manual
+            return View(viewModel);
+        }
     }
 }
