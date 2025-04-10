@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Entities;
+using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Entities;
 using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -172,7 +172,7 @@ namespace MBA.Marketplace.Web.Controllers
             var produto = await _produtoService.PublicObterPorIdAsync(id);
             if (produto == null) return NotFound();
 
-            var viewModel = _mapper.Map<ProdutoViewModel>(produto); // ou manual
+            var viewModel = _mapper.Map<ProdutoViewModel>(produto);
             return View(viewModel);
         }
     }

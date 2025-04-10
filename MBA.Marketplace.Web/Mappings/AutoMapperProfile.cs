@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MBA.Marketplace.Core.Entities;
+using MBA.Marketplace.Data.Entities;
 using MBA.Marketplace.Web.ViewModels;
 
 namespace MBA.Marketplace.Web.Mappings

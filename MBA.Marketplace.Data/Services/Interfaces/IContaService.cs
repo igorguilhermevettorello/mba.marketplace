@@ -1,4 +1,4 @@
-﻿using MBA.Marketplace.Core.DTOs;
+﻿using MBA.Marketplace.Data.DTOs;
 using System.Security.Claims;
 
 namespace MBA.Marketplace.Data.Services.Interfaces

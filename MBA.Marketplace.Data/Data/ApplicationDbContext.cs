@@ -1,5 +1,5 @@
-﻿using MBA.Marketplace.Core.Entities;
-using MBA.Marketplace.Core.Models;
+﻿using MBA.Marketplace.Data.Entities;
+using MBA.Marketplace.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

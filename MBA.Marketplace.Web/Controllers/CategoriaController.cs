@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Enums;
-using MBA.Marketplace.Core.Extensions;
+using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Enums;
+using MBA.Marketplace.Data.Extensions;
 using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;

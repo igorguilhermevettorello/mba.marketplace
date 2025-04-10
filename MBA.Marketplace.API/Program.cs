@@ -1,17 +1,15 @@
-﻿using MBA.Marketplace.Data.Services.Interfaces;
-using MBA.Marketplace.Data.Services;
-using MBA.Marketplace.Core.Models;
+﻿using MBA.Marketplace.API.Utils;
+using MBA.Marketplace.API.Utils.Identity;
+using MBA.Marketplace.Data.Configurations;
+using MBA.Marketplace.Data.Models;
 using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Services;
+using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using MBA.Marketplace.API.Utils.Identity;
-using MBA.Marketplace.Core.Configurations;
-using MBA.Marketplace.Core.Services.Interfaces;
-using MBA.Marketplace.Core.Services;
-using MBA.Marketplace.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,16 +1,13 @@
-using MBA.Marketplace.Core.Configurations;
-using MBA.Marketplace.Core.Models;
-using MBA.Marketplace.Core.Services.Interfaces;
-using MBA.Marketplace.Core.Utils.Identity;
+using MBA.Marketplace.Data.Configurations;
 using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Models;
 using MBA.Marketplace.Data.Services;
 using MBA.Marketplace.Data.Services.Interfaces;
+using MBA.Marketplace.Data.Utils.Identity;
 using MBA.Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

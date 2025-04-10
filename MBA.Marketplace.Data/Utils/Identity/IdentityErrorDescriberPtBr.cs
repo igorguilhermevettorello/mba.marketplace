@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace MBA.Marketplace.Core.Utils.Identity
+namespace MBA.Marketplace.Data.Utils.Identity
 {
     public class IdentityErrorDescriberPtBr : IdentityErrorDescriber
     {

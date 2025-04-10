@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MBA.Marketplace.Core.Entities
+namespace MBA.Marketplace.Data.Entities
 {
     [Table("Produtos")]
     public class Produto

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace MBA.Marketplace.Core.Extensions
+namespace MBA.Marketplace.Data.Extensions
 {
     public static class EnumExtensions
     {

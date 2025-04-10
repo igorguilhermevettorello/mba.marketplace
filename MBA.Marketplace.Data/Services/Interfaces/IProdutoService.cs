@@ -1,5 +1,5 @@
-﻿using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Entities;
+﻿using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace MBA.Marketplace.Data.Services.Interfaces

@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBA.Marketplace.API", "MBA.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBA.Marketplace.Data", "MBA.Marketplace.Data\MBA.Marketplace.Data.csproj", "{F1C4593D-BD2A-4F28-BBA1-BA08CEBA498E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBA.Marketplace.Core", "MBA.Marketplace.Core\MBA.Marketplace.Core.csproj", "{F524B21B-2D8C-4312-A968-F5CF7B3D2585}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{F1C4593D-BD2A-4F28-BBA1-BA08CEBA498E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1C4593D-BD2A-4F28-BBA1-BA08CEBA498E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1C4593D-BD2A-4F28-BBA1-BA08CEBA498E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F524B21B-2D8C-4312-A968-F5CF7B3D2585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F524B21B-2D8C-4312-A968-F5CF7B3D2585}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F524B21B-2D8C-4312-A968-F5CF7B3D2585}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F524B21B-2D8C-4312-A968-F5CF7B3D2585}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

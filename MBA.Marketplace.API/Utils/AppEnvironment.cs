@@ -1,4 +1,4 @@
-﻿using MBA.Marketplace.Core.Services.Interfaces;
+﻿using MBA.Marketplace.Data.Services.Interfaces;
 
 namespace MBA.Marketplace.API.Utils
 {

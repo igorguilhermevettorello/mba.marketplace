@@ -1,8 +1,5 @@
-﻿using MBA.Marketplace.Core.Services.Interfaces;
-using MBA.Marketplace.Data.Services.Interfaces;
+﻿using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
-
-
 
 namespace MBA.Marketplace.Data.Services
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MBA.Marketplace.Core.DTOs
+namespace MBA.Marketplace.Data.DTOs
 {
     public class LoginDto
     {

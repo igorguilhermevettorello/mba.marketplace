@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MBA.Marketplace.Core.DTOs
+﻿namespace MBA.Marketplace.Data.DTOs
 {
     public class RetornoRegistrarUsuarioDto
     {

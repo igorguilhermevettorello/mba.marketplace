@@ -1,7 +1,7 @@
-﻿using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Entities;
-using MBA.Marketplace.Core.Models;
-using MBA.Marketplace.Core.Services.Interfaces;
+﻿using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Entities;
+using MBA.Marketplace.Data.Models;
+using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

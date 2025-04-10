@@ -1,6 +1,6 @@
-﻿using MBA.Marketplace.Core.Services.Interfaces;
-using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Models;
+﻿using MBA.Marketplace.Data.Services.Interfaces;
+using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 
-namespace MBA.Marketplace.Core.Services
+namespace MBA.Marketplace.Data.Services
 {
     public class AccountService : IAccountService
     {

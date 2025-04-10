@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MBA.Marketplace.Core.DTOs
+namespace MBA.Marketplace.Data.DTOs
 {
     public class CategoriaDto
     {

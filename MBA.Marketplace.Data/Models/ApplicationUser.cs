@@ -1,7 +1,7 @@
-﻿using MBA.Marketplace.Core.Entities;
+﻿using MBA.Marketplace.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace MBA.Marketplace.Core.Models
+namespace MBA.Marketplace.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {

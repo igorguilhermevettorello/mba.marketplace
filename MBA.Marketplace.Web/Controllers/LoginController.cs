@@ -1,5 +1,5 @@
-﻿using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Models;
+﻿using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Models;
 using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;

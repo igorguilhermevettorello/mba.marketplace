@@ -1,5 +1,4 @@
 using AutoMapper;
-using MBA.Marketplace.Data.Services;
 using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Web.Models;
 using MBA.Marketplace.Web.ViewModels;

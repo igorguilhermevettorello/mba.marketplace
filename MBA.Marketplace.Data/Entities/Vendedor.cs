@@ -1,8 +1,8 @@
-﻿using MBA.Marketplace.Core.Models;
+﻿using MBA.Marketplace.Data.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MBA.Marketplace.Core.Entities
+namespace MBA.Marketplace.Data.Entities
 {
     [Table("Vendedores")]
     public class Vendedor

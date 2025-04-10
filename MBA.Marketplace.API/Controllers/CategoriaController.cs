@@ -1,7 +1,7 @@
-﻿using MBA.Marketplace.Core.DTOs;
-using MBA.Marketplace.Core.Entities;
-using MBA.Marketplace.Core.Enums;
-using MBA.Marketplace.Core.Extensions;
+﻿using MBA.Marketplace.Data.DTOs;
+using MBA.Marketplace.Data.Entities;
+using MBA.Marketplace.Data.Enums;
+using MBA.Marketplace.Data.Extensions;
 using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
