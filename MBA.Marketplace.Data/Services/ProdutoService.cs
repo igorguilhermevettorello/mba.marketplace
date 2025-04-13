@@ -1,64 +1,36 @@
 ﻿using MBA.Marketplace.Data.DTOs;
 using MBA.Marketplace.Data.Entities;
-using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace MBA.Marketplace.Data.Services
 {
     public class ProdutoService : IProdutoService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IProdutoRepository _produtoRepository;
         private readonly IConfiguration _config;
-        public ProdutoService(ApplicationDbContext context, IConfiguration config)
+        public ProdutoService(IProdutoRepository produtoRepository, IConfiguration config)
         {
-            _context = context;
+            _produtoRepository = produtoRepository;
             _config = config;
         }
-
         public async Task<IEnumerable<Produto>> ListarAllAsync()
         {
-            return await _context
-                    .Produtos
-                    .Include(p => p.Categoria)
-                    .Include(p => p.Vendedor)
-                    .ToListAsync();
+            return await _produtoRepository.ListarAsync();
         }
         public async Task<IEnumerable<Produto>> ListarProdutosPorCategoriaAsync(Guid categoriaId) 
         {
-            return await _context
-                    .Produtos
-                    .Include(p => p.Categoria)
-                    .Include(p => p.Vendedor)
-                    .Where(p => p.CategoriaId == categoriaId)
-                    .ToListAsync();
+            return await _produtoRepository.ListarPorCategoriaIdAsync(categoriaId, true);
         }
         public async Task<IEnumerable<Produto>> ListarProdutosPorCategoriaOuNomeDescricaoAsync(Guid? categoriaId, string descricao)
         {
-            var query = _context.Produtos.AsQueryable();
-
-            if (categoriaId != null)
-            {
-                query = query.Where(p => p.CategoriaId == categoriaId);
-            }
-
-            if (descricao != null)
-            {
-                query = query.Where(p => p.Nome.Contains(descricao));
-            }
-
-            return await query.ToListAsync();
+            return await _produtoRepository.ListarProdutosPorCategoriaOuNomeDescricaoAsync(categoriaId, descricao);
         }
         public async Task<IEnumerable<Produto>> ListarAsync(Vendedor vendedor)
         {
-            return await _context
-                .Produtos
-                .Include(p => p.Categoria)
-                .Include(p => p.Vendedor)
-                .Where(p => p.VendedorId == vendedor.Id)
-                .ToListAsync();
+            return await _produtoRepository.ListarPorVendedorIdAsync(vendedor);
         }
         public async Task<Produto> CriarAsync(ProdutoDto dto, Vendedor vendedor)
         {
@@ -76,8 +48,7 @@ namespace MBA.Marketplace.Data.Services
                 await dto.Imagem.CopyToAsync(stream);
             }
 
-            // Criar produto
-            var produto = new Produto
+            var produto = await _produtoRepository.CriarAsync(new Produto
             {
                 Nome = dto.Nome,
                 Descricao = dto.Descricao,
@@ -86,28 +57,21 @@ namespace MBA.Marketplace.Data.Services
                 CategoriaId = (Guid)dto.CategoriaId,
                 VendedorId = vendedor.Id,
                 Imagem = nomeArquivo
-            };
+            });
 
-            _context.Produtos.Add(produto);
-            await _context.SaveChangesAsync();
             return produto;
         }
         public async Task<Produto> ObterPorIdAsync(Guid id, Vendedor vendedor)
         {
-            return await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            return await _produtoRepository.ObterPorIdPorVendedorIdAsync(id, vendedor);
         }
         public async Task<Produto> PublicObterPorIdAsync(Guid id)
         {
-            return await _context
-                .Produtos
-                .Include(p => p.Categoria)
-                .Include(p => p.Vendedor)
-                .Where(p => p.Id == id)
-                .FirstOrDefaultAsync();
+            return await _produtoRepository.ObterPorIdAsync(id);
         }
         public async Task<bool> AtualizarAsync(Guid id, ProdutoEditDto dto, Vendedor vendedor, IFormFile? imagem)
         {
-            var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            var produto = await _produtoRepository.ObterPorIdPorVendedorIdAsync(id, vendedor);
             if (produto == null)
                 return false;
 
@@ -130,7 +94,6 @@ namespace MBA.Marketplace.Data.Services
                 produto.Imagem = nomeArquivo;
             }
             
-
             produto.Nome = dto.Nome;
             produto.Descricao = dto.Descricao;
             produto.Preco = (decimal)dto.Preco;
@@ -138,20 +101,15 @@ namespace MBA.Marketplace.Data.Services
             produto.CategoriaId = (Guid)dto.CategoriaId;
             produto.VendedorId = vendedor.Id;
             produto.UpdatedAt = DateTime.Now;
-
-            _context.Produtos.Update(produto);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _produtoRepository.AtualizarAsync(produto);
         }
         public async Task<bool> RemoverAsync(Guid id, Vendedor vendedor)
         {
-            var produto = await _context.Produtos.Where(p => p.Id == id && p.VendedorId == vendedor.Id).FirstOrDefaultAsync();
+            var produto = await _produtoRepository.ObterPorIdPorVendedorIdAsync(id, vendedor);
             if (produto == null)
                 return false;
 
-            _context.Produtos.Remove(produto);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _produtoRepository.RemoverAsync(produto);
         }
     }
 }

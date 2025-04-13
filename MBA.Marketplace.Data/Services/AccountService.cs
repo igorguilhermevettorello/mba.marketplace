@@ -1,39 +1,41 @@
-﻿using MBA.Marketplace.Data.Services.Interfaces;
-using MBA.Marketplace.Data.DTOs;
+﻿using MBA.Marketplace.Data.DTOs;
 using MBA.Marketplace.Data.Models;
+using MBA.Marketplace.Data.Repositories.Interfaces;
+using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 
 namespace MBA.Marketplace.Data.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IUserRepository<ApplicationUser> _userRepository;
 
-        public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AccountService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IUserRepository<ApplicationUser> userRepository)
         {
-            _userManager = userManager;
             _configuration = configuration;
+            _userRepository = userRepository;
         }
 
         public async Task<(bool Success, string Token, IEnumerable<string> Errors)> LoginAsync(LoginDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Senha))
+            var usuario = await _userRepository.FindByEmailAsync(dto.Email);
+            var checkPassword = !await _userRepository.CheckPasswordAsync(usuario, dto.Senha);
+            if (usuario == null || !checkPassword)
             {
                 return (false, null, new[] { "E-mail ou senha inválidos." });
             }
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id),
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.Name, usuario.UserName)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));

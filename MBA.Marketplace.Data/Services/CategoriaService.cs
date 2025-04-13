@@ -1,43 +1,41 @@
 ﻿using MBA.Marketplace.Data.DTOs;
 using MBA.Marketplace.Data.Entities;
 using MBA.Marketplace.Data.Enums;
-using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 using MBA.Marketplace.Data.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace MBA.Marketplace.Data.Services
 {
     public class CategoriaService : ICategoriaService
     {
-        private readonly ApplicationDbContext _context;
-        public CategoriaService(ApplicationDbContext context)
+        private readonly ICategoriaRepository _categoriaRepository;
+        private readonly IProdutoRepository _produtoRepository;
+        public CategoriaService(ICategoriaRepository categoriaRepository, IProdutoRepository produtoRepository)
         {
-            _context = context;
+            _categoriaRepository = categoriaRepository;
+            _produtoRepository = produtoRepository;
         }
         public async Task<IEnumerable<Categoria>> ListarAsync()
         {
-            return await _context.Categorias.ToListAsync();
+            return await _categoriaRepository.ListarAsync();
         }
         public async Task<Categoria> CriarAsync(CategoriaDto dto)
         {
-            var categoria = new Categoria
+            var categoria = await _categoriaRepository.CriarAsync(new Categoria
             {
                 Nome = dto.Nome,
                 Descricao = dto.Descricao,
                 CreatedAt = DateTime.Now
-            };
-
-            _context.Categorias.Add(categoria);
-            await _context.SaveChangesAsync();
+            });
             return categoria;
         }
         public async Task<Categoria> ObterPorIdAsync(Guid id)
         {
-            return await _context.Categorias.FindAsync(id);
+            return await _categoriaRepository.ObterPorIdAsync(id);
         }
         public async Task<bool> AtualizarAsync(Guid id, CategoriaDto dto)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
+            var categoria = await _categoriaRepository.ObterPorIdAsync(id);
             if (categoria == null)
                 return false;
 
@@ -45,22 +43,19 @@ namespace MBA.Marketplace.Data.Services
             categoria.Descricao = dto.Descricao;
             categoria.UpdatedAt = DateTime.Now;
 
-            _context.Categorias.Update(categoria);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _categoriaRepository.AtualizarAsync(categoria);
         }
         public async Task<StatusRemocaoEnum> RemoverAsync(Guid id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
+            var categoria = await _categoriaRepository.ObterPorIdAsync(id);
             if (categoria == null)
                 return StatusRemocaoEnum.NaoEncontrado;
 
-            var produto = await _context.Produtos.Where(p => p.CategoriaId == id).ToListAsync();
+            var produto = await _produtoRepository.ListarPorCategoriaIdAsync(id, false);
             if (produto.Any())
                 return StatusRemocaoEnum.VinculacaoProduto;
 
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
+            await _categoriaRepository.RemoverAsync(categoria);
             return StatusRemocaoEnum.Removido;
         }
     }
