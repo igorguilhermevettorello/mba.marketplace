@@ -16,8 +16,10 @@ namespace MBA.Marketplace.Data.Services
 
         public async Task<Vendedor> ObterPorIdAsync(string id)
         {
-            return await _context.Vendedores
-                .FirstOrDefaultAsync(v => v.UsuarioId == id.ToString());
+            return await _context
+                .Vendedores
+                .Where(v => v.UsuarioId == id.ToString())
+                .FirstOrDefaultAsync();
         }
     }
 }

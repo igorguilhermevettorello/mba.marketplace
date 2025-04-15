@@ -1,10 +1,12 @@
 ﻿using MBA.Marketplace.API.Utils;
-using MBA.Marketplace.API.Utils.Identity;
 using MBA.Marketplace.Data.Configurations;
-using MBA.Marketplace.Data.Models;
 using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Models;
+using MBA.Marketplace.Data.Repositories;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 using MBA.Marketplace.Data.Services;
 using MBA.Marketplace.Data.Services.Interfaces;
+using MBA.Marketplace.Data.Utils.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +72,10 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IAppEnvironment, AppEnvironment>();
+builder.Services.AddScoped<IVendedorRepository, VendedorRepository>();
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IUserRepository<ApplicationUser>, UserRepository>();
 
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));

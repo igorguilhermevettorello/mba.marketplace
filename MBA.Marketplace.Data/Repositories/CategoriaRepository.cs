@@ -24,7 +24,7 @@ namespace MBA.Marketplace.Data.Repositories
             await _context.SaveChangesAsync();
             return categoria;
         }
-        public async Task<Categoria> ObterPorIdAsync(Guid id)
+        public async Task<Categoria?> ObterPorIdAsync(Guid? id)
         {
             return await _context.Categorias.FindAsync(id);
         }

@@ -1,6 +1,8 @@
 using MBA.Marketplace.Data.Configurations;
 using MBA.Marketplace.Data.Data;
 using MBA.Marketplace.Data.Models;
+using MBA.Marketplace.Data.Repositories.Interfaces;
+using MBA.Marketplace.Data.Repositories;
 using MBA.Marketplace.Data.Services;
 using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Data.Utils.Identity;
@@ -37,6 +39,10 @@ builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IVendedorService, VendedorService>();
+builder.Services.AddScoped<IVendedorRepository, VendedorRepository>();
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IUserRepository<ApplicationUser>, UserRepository>();
 
 builder.Services.AddScoped<IAppEnvironment, AppEnvironment>();
 

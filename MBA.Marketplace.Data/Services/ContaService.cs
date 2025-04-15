@@ -1,10 +1,9 @@
-﻿using MBA.Marketplace.Data.DTOs;
+﻿using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.DTOs;
 using MBA.Marketplace.Data.Entities;
 using MBA.Marketplace.Data.Models;
-using MBA.Marketplace.Data.Data;
 using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

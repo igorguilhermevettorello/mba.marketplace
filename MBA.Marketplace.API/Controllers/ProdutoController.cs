@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 
 namespace MBA.Marketplace.API.Controllers
 {
@@ -16,32 +17,31 @@ namespace MBA.Marketplace.API.Controllers
     [Authorize]
     public class ProdutoController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IVendedorRepository _vendedorRepository;
+        private readonly ICategoriaRepository _categoriaRepository;
         private readonly IProdutoService _produtoService;
-        private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
-        public ProdutoController(ApplicationDbContext context, IProdutoService produtoService, IWebHostEnvironment env, IConfiguration config)
+        public ProdutoController(IVendedorRepository vendedorRepository, ICategoriaRepository categoriaRepository, IProdutoService produtoService, IConfiguration config)
         {
-            _context = context;
+            _vendedorRepository = vendedorRepository;
+            _categoriaRepository = categoriaRepository;
             _produtoService = produtoService;
-            _env = env;
             _config = config;
         }
         private async Task<Vendedor> BuscarVendedorLogado()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var vendedor = await _context.Vendedores
-                .FirstOrDefaultAsync(v => v.UsuarioId == userId);
+            var vendedor = await _vendedorRepository.ObterPorUsuarioIdAsync(userId);
 
             if (vendedor == null)
                 throw new UnauthorizedAccessException("Usuário não é um vendedor válido.");
 
             return vendedor;
         }
-        private async Task<Categoria> BuscarCategoria(Guid? id)
+        private async Task<Categoria?> BuscarCategoria(Guid? id)
         {
-            return await _context.Categorias.FirstOrDefaultAsync(c => c.Id == id);
+            return await _categoriaRepository.ObterPorIdAsync(id);
         }
         private string GetContentType(string path)
         {

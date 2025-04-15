@@ -5,6 +5,8 @@ using MBA.Marketplace.Data.Services.Interfaces;
 using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MBA.Marketplace.Data.Repositories.Interfaces;
+using MBA.Marketplace.Data.Repositories;
 
 namespace MBA.Marketplace.API.Controllers
 {
@@ -13,15 +15,15 @@ namespace MBA.Marketplace.API.Controllers
     public class ContaController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _context;
+        private readonly IVendedorRepository _vendedorRepository;
         private readonly IAccountService _accountService;
 
         private string[] ErrorPassowrd = { "PasswordTooShort", "PasswordRequiresNonAlphanumeric", "PasswordRequiresLower", "PasswordRequiresUpper", "PasswordRequiresDigit" };
         private string[] ErrorEmail = { "DuplicateUserName" };
-        public ContaController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IAccountService accountService)
+        public ContaController(UserManager<ApplicationUser> userManager, IVendedorRepository vendedorRepository, IAccountService accountService)
         {
             _userManager = userManager;
-            _context = context;
+            _vendedorRepository = vendedorRepository;
             _accountService = accountService;
         }
 
@@ -65,9 +67,8 @@ namespace MBA.Marketplace.API.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            _context.Vendedores.Add(vendedor);
-            await _context.SaveChangesAsync();
-
+            await _vendedorRepository.CriarAsync(vendedor);
+            
             return Ok(new { message = "Conta criada com sucesso." });
         }
 
