@@ -1,12 +1,10 @@
 ﻿using MBA.Marketplace.Data.DTOs;
 using MBA.Marketplace.Data.Entities;
 using MBA.Marketplace.Data.Models;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 using MBA.Marketplace.Data.Services.Interfaces;
-using MBA.Marketplace.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MBA.Marketplace.Data.Repositories.Interfaces;
-using MBA.Marketplace.Data.Repositories;
 
 namespace MBA.Marketplace.API.Controllers
 {
@@ -59,15 +57,13 @@ namespace MBA.Marketplace.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vendedor = new Vendedor
+            await _vendedorRepository.CriarAsync(new Vendedor
             {
                 Nome = dto.Nome,
                 Email = dto.Email,
                 UsuarioId = user.Id,
                 CreatedAt = DateTime.Now
-            };
-
-            await _vendedorRepository.CriarAsync(vendedor);
+            });
             
             return Ok(new { message = "Conta criada com sucesso." });
         }

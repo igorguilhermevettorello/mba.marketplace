@@ -12,10 +12,11 @@ namespace MBA.Marketplace.Data.Repositories
         {
             _context = context;
         }
-        public async Task CriarAsync(Vendedor vendedor)
+        public async Task<bool> CriarAsync(Vendedor vendedor)
         {
             _context.Vendedores.Add(vendedor);
             await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<Vendedor?> ObterPorUsuarioIdAsync(string usuario)

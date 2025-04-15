@@ -25,7 +25,7 @@ namespace MBA.Marketplace.Data.Services
         public async Task<(bool Success, string Token, IEnumerable<string> Errors)> LoginAsync(LoginDto dto)
         {
             var usuario = await _userRepository.FindByEmailAsync(dto.Email);
-            var checkPassword = !await _userRepository.CheckPasswordAsync(usuario, dto.Senha);
+            var checkPassword = await _userRepository.CheckPasswordAsync(usuario, dto.Senha);
             if (usuario == null || !checkPassword)
             {
                 return (false, null, new[] { "E-mail ou senha inválidos." });

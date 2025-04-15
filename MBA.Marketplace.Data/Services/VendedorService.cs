@@ -1,25 +1,22 @@
 ﻿using MBA.Marketplace.Data.Entities;
-using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 using MBA.Marketplace.Data.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace MBA.Marketplace.Data.Services
 {
     public class VendedorService : IVendedorService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IVendedorRepository _vendedorRepository;
 
-        public VendedorService(ApplicationDbContext context)
+        public VendedorService(IVendedorRepository vendedorRepository)
         {
-            _context = context;
+            _vendedorRepository = vendedorRepository;
         }
 
-        public async Task<Vendedor> ObterPorIdAsync(string id)
+        public async Task<Vendedor?> ObterPorIdAsync(string id)
         {
-            return await _context
-                .Vendedores
-                .Where(v => v.UsuarioId == id.ToString())
-                .FirstOrDefaultAsync();
+            return await _vendedorRepository.ObterPorUsuarioIdAsync(id);
+                
         }
     }
 }

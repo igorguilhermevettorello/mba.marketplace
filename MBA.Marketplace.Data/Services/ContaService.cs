@@ -2,6 +2,8 @@
 using MBA.Marketplace.Data.DTOs;
 using MBA.Marketplace.Data.Entities;
 using MBA.Marketplace.Data.Models;
+using MBA.Marketplace.Data.Repositories;
+using MBA.Marketplace.Data.Repositories.Interfaces;
 using MBA.Marketplace.Data.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -16,14 +18,14 @@ namespace MBA.Marketplace.Data.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
-        private readonly ApplicationDbContext _context;
+        private readonly IVendedorRepository _vendedorRepository;
         private string[] ErrorPassowrd = { "PasswordTooShort", "PasswordRequiresNonAlphanumeric", "PasswordRequiresLower", "PasswordRequiresUpper", "PasswordRequiresDigit" };
         private string[] ErrorEmail = { "DuplicateUserName" };
-        public ContaService(UserManager<ApplicationUser> userManager, IConfiguration configuration, ApplicationDbContext context)
+        public ContaService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IVendedorRepository vendedorRepository)
         {
             _userManager = userManager;
             _configuration = configuration;
-            _context = context;
+            _vendedorRepository = vendedorRepository;
         }
         public async Task<(bool Success, string Token, IEnumerable<string> Errors, string UserId)> LoginAsync(LoginDto dto)
         {
@@ -94,9 +96,7 @@ namespace MBA.Marketplace.Data.Services
                 CreatedAt = DateTime.Now
             };
 
-            _context.Vendedores.Add(vendedor);
-            await _context.SaveChangesAsync();
-            _retorno.Status = true;
+            _retorno.Status = await _vendedorRepository.CriarAsync(vendedor);
             return _retorno;
         }
     }

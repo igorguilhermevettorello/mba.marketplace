@@ -13,9 +13,9 @@ namespace MBA.Marketplace.Data.Repositories
             _userManager = userManager;
         }
 
-        public Task<bool> CheckPasswordAsync(ApplicationUser usuario, string senha)
+        public async Task<bool> CheckPasswordAsync(ApplicationUser usuario, string senha)
         {
-            throw new NotImplementedException();
+            return await _userManager.CheckPasswordAsync(usuario, senha);
         }
 
         public async Task<ApplicationUser?> FindByEmailAsync(string email)

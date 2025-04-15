@@ -50,6 +50,7 @@ namespace MBA.Marketplace.Web.Controllers
                 return View(model);
             }
 
+            // gera o cookie de autenticação
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Senha, false, false);
             if (!result.Succeeded) 
             {
