@@ -41,8 +41,7 @@ A estrutura do projeto é organizada da seguinte forma:
 - mba.marketplace/
   - MBA.Marketplace.Web/ - Projeto MVC
   - MBA.Marketplace.Api/ - API RESTful
-  - MBA.Marketplace.Data/ - Modelos de Dados e Configuração do EF Core
-  - MBA.Marketplace.Core/ - Contém entidades, interfaces, Enums, Utils
+  - MBA.Marketplace.Data/ - Modelos de dados, configuração do EF Core, entidades, interfaces, Enums, Utils
 - README.md - Arquivo de Documentação do Projeto
 - FEEDBACK.md - Arquivo para Consolidação dos Feedbacks
 - .gitignore - Arquivo de Ignoração do Git
