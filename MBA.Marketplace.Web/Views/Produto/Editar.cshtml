@@ -58,6 +58,7 @@
                     <span asp-validation-for="Imagem" class="text-danger small"></span>
                     <div class="mt-2">
                         <img src="/imagens/@Model.Src"
+                             onerror="this.onerror=null; this.src='/images/foto-indisponivel.png';"
                              alt="@Model.Nome"
                              class="img-thumbnail"
                              id="previewImagem"
@@ -81,7 +82,6 @@
 
     <script>
         $(document).ready(function () {
-            debugger;
             let preco = "@Model.Preco.ToPtBrCurrency()";
 
             $('.preco-mask').maskMoney({

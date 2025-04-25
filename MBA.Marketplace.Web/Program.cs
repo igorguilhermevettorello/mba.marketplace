@@ -10,6 +10,7 @@ using MBA.Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using MBA.Marketplace.Data.Migrations.Seeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
+    await SeederAplicacao.SeedVendedorComUsuarioAsync(app.Services);
 }
 
 // Configure the HTTP request pipeline.

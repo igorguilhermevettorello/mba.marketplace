@@ -1,6 +1,7 @@
 ﻿using MBA.Marketplace.API.Utils;
 using MBA.Marketplace.Data.Configurations;
 using MBA.Marketplace.Data.Data;
+using MBA.Marketplace.Data.Migrations.Seeder;
 using MBA.Marketplace.Data.Models;
 using MBA.Marketplace.Data.Repositories;
 using MBA.Marketplace.Data.Repositories.Interfaces;
@@ -116,6 +117,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
+    await SeederAplicacao.SeedVendedorComUsuarioAsync(app.Services);
 }
 
 // Configure the HTTP request pipeline.

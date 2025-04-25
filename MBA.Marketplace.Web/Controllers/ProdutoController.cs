@@ -166,6 +166,7 @@ namespace MBA.Marketplace.Web.Controllers
 
             return BadRequest("Erro ao excluir produto.");
         }
+        [AllowAnonymous]
         [HttpGet("detalhe/{id:Guid}")]
         public async Task<IActionResult> Detalhes(Guid id)
         {

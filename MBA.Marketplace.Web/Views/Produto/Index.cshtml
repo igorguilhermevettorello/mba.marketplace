@@ -34,7 +34,10 @@ else
                     <td class="text-muted">@produto.Estoque</td>
                     <td class="text-muted">@produto.Categoria.Nome</td>
                     <td class="text-muted">
-                        <img style="width: 100px" src="/imagens/@produto.Src" />
+                        <img 
+                            style="width: 100px" 
+                            src="/imagens/@produto.Src"
+                            onerror="this.onerror=null; this.src='/images/foto-indisponivel.png';" />
                     </td>
                     <td class="text-end">
                         <a class="btn btn-outline-success btn-sm me-1" title="Editar" href="@Url.Action("editar", "produto", new { id = produto.Id })" data-id="@produto.Id">
