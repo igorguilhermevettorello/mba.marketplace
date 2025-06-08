@@ -1,59 +1,96 @@
 # Feedback - Avaliação Geral
 
 ## Front End
+
 ### Navegação
-**Pontos positivos:**
--  Estrutura básica de controllers e views está presente.
+  * Pontos positivos:
+    - Views implementadas para login, registro, cadastro e edição de produtos e categorias.
+    - Navegação clara, com rotas definidas conforme os requisitos de CRUD para produtos e categorias.
+
+  * Pontos negativos:
+    - Nenhum ponto negativo observado quanto à navegação.
 
 ### Design
-  - Será avaliado na entrega final.
+  - A interface web é funcional, com layout adequado ao propósito administrativo. Uso básico de HTML e CSS, suficiente para o escopo do projeto.
 
 ### Funcionalidade
-**Pontos positivos:**
--  Controllers e views para Produto e Categoria existem, com rotas aparentemente corretas.
+  * Pontos positivos:
+    - Todas as funcionalidades de CRUD para produtos e categorias estão implementadas.
+    - Exibição pública de produtos na home conforme esperado.
+    - Acesso restrito por autenticação em ações protegidas.
+    - Registro de usuário e criação simultânea do vendedor implementados.
 
-**Pontos negativos:**
-  - Será avaliado na entrega final
+  * Pontos negativos:
+    - Nenhum ponto negativo encontrado quanto à cobertura funcional.
 
 ## Back End
-### Arquitetura
-**Pontos positivos:**
--  Projeto segue uma arquitetura enxuta
--  MVC e API estão separados fisicamente e não se consomem diretamente — conforme exigido no escopo.
 
-**Pontos negativos:**
--  Camada Core e Data se conflitam, apenas uma é necessária nesse caso.
--  Não há abstração clara entre lógica de negócio e persistência de dados.
--  `MBA.Marketplace.Data` assume parte do papel da camada de domínio ao implementar serviços
--  Falta coesão entre os projetos — não está claro o papel exato de cada um sem leitura aprofundada.
+### Arquitetura
+  * Pontos positivos:
+    - Projeto segue a separação API, MVC e camada de dados.
+    - Organização clara entre camadas e responsabilidades.
+
+  * Pontos negativos:
+    - A camada `MBA.Marketplace.Data` assume responsabilidades além de persistência, como lógica de negócio e autenticação, sendo mais apropriado nomeá-la como `Core`.
+    - Acoplamento da entidade `Vendedor` na `ApplicationUser` fere a separação recomendada entre identidade e domínio.
 
 ### Funcionalidade
-**Pontos positivos:**
--  CRUD de Produto e Categoria está implementado em controllers REST na API.
--  Autenticação via JWT está parcialmente configurada.
--  Vendedor é criado no momento do registro do usuário
+  * Pontos positivos:
+    - Uso correto de ASP.NET Identity para autenticação/autorização.
+    - Uso do EF Core com SQLite.
+    - Seed automático de dados e execução de migrations no startup da aplicação implementados corretamente.
 
+  * Pontos negativos:
+    - Nenhum ponto negativo funcional observado.
 
 ### Modelagem
-**Pontos positivos:**
--  Entidades `Produto`, `Categoria` e `Vendedor` estão presentes.
--  Estrutura básica de relacionamento está coerente com o escopo.
+  * Pontos positivos:
+    - Entidades bem definidas, simples e coerentes com o domínio.
+    - Associação de produtos com vendedor implementada.
+
+  * Pontos negativos:
+    - Uso de data annotations diretamente nas entidades, em vez de classes de configuração (via `IEntityTypeConfiguration`), reduz a flexibilidade da modelagem.
 
 ## Projeto
+
 ### Organização
-**Pontos positivos:**
--  Organização em múltiplos projetos com nomes claros e coerentes com suas responsabilidades.
+  * Pontos positivos:
+    - Separação clara dos projetos (API, MVC, Data).
+    - Solution file presente e bem estruturado.
+    - Estrutura de pastas coesa e nomeações consistentes.
+
+  * Pontos negativos:
+    - Projeto `Data` com papel de domínio, idealmente deveria ser renomeado para `Core`.
 
 ### Documentação
-**Pontos positivos:**
--  README.md básico existe com nome e descrição do projeto.
+  * Pontos positivos:
+    - README.md presente com boas instruções.
+    - Swagger implementado.
+    - Arquivo `FEEDBACK.md` presente.
 
+  * Pontos negativos:
+    - Nenhum ponto negativo relevante.
 
 ### Instalação
-**Pontos positivos:**
--  Uso de SQLite está implementado, conforme exigência do escopo para ambiente de desenvolvimento.
+  * Pontos positivos:
+    - SQLite configurado.
+    - Execução de migrations e seed no startup automatizada.
 
-**Pontos negativos:**
--  Nenhum dado de exemplo ou script de seed para validação do CRUD.
--  Migrations não são aplicadas automaticamente.
+  * Pontos negativos:
+    - Nenhum ponto negativo identificado.
 
+---
+
+# 📊 Matriz de Avaliação de Projetos
+
+| **Critério**                   | **Peso** | **Nota** | **Resultado Ponderado**                  |
+|-------------------------------|----------|----------|------------------------------------------|
+| **Funcionalidade**            | 30%      | 9        | 2,7                                      |
+| **Qualidade do Código**       | 20%      | 9        | 1,8                                      |
+| **Eficiência e Desempenho**   | 20%      | 9        | 1,8                                      |
+| **Inovação e Diferenciais**   | 10%      | 10       | 1,0                                      |
+| **Documentação e Organização**| 10%      | 9        | 0,9                                      |
+| **Resolução de Feedbacks**    | 10%      | 10       | 1,0                                      |
+| **Total**                     | 100%     | -        | **9,2**                                  |
+
+## 🎯 **Nota Final: 9,2 / 10**
